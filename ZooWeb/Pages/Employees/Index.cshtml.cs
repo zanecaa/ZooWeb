@@ -60,4 +60,4 @@ namespace ZooWeb.Pages.Employees
         public string Lname;
         public string Salary;
     }
-}
+} 
