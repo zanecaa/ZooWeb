@@ -20,10 +20,10 @@
 			<tr>
 				<td>@item.FirstName @item.LastName</td>
 				<td>@item.PhoneNumber</td>
-				<td>@item.BirthDate.ToString("MM/dd/yyyy")</td>
+				<td>@item.BirthDate</td>
 				<td>
-					<a class='btn btn-primary btn-sm' href="/Visitors/Edit?id=@item.Id">Edit</a>
-					<a class='btn btn-danger btn-sm' href="/Visitors/Delete?id=@item.Id">Delete</a>
+					<a class='btn btn-primary btn-sm' href="/Visitors/Edit?id=@item.PhoneNumber">Edit</a>
+					<a class='btn btn-danger btn-sm' href="/Visitors/Delete?id=@item.PhoneNumber">Delete</a>
 				</td>
 			</tr>
 		}

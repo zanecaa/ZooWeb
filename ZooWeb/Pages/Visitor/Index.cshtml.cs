@@ -25,11 +25,10 @@ namespace ZooWeb.Pages.Visitor
 						while (reader.Read())
 						{
 							VisitorInfo info = new VisitorInfo();
-							info.Id = reader.GetInt32(0);
+							info.PhoneNumber = reader.GetInt64(0).ToString();
 							info.FirstName = reader.GetString(1);
 							info.LastName = reader.GetString(2);
-							info.PhoneNumber = reader.GetString(3);
-							info.BirthDate = reader.GetDateTime(4);
+							info.BirthDate = reader.GetDateTime(3).ToString();
 
 							ListVisitors.Add(info);
 						}
@@ -41,10 +40,9 @@ namespace ZooWeb.Pages.Visitor
 
 	public class VisitorInfo
 	{
-		public int Id;
 		public string FirstName;
 		public string LastName;
 		public string PhoneNumber;
-		public DateTime BirthDate;
+		public string BirthDate;
 	}
 }
