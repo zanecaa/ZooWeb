@@ -12,12 +12,12 @@ namespace ZooWeb.Pages.TicketSales
 
 		public void OnGet()
 		{
-			string connectionString = "Server=tcp:yourdbserver.database.windows.net,1433;Database=YourDatabase;User ID=youruser;Password=yourpassword;Trusted_Connection=False;Encrypt=True;";
+			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT * FROM TicketSales";
+				String sql = "SELECT * FROM ticket_sales";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					using (SqlDataReader reader = command.ExecuteReader())
