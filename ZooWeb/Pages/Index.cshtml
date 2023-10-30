@@ -1,10 +1,39 @@
 ﻿@page
-@model IndexModel
+@model ZooWeb.Pages.TicketSales.IndexModel
 @{
-    ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<br>
+<h2>List of Ticket Sales</h2>
+<a class='btn btn-primary btn-sm' href="/TicketSales/Create">New Ticket Sale</a>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Receipt Number</th>
+			<th>Date</th>
+			<th>Total</th>
+			<th>Sales Tax</th>
+			<th>Ticket ID</th>
+			<th>Pass Type</th>
+			<th>Employee SSN</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.ListTicketSales)
+		{
+			<tr>
+				<td>@item.ReceiptNumber</td>
+				<td>@item.Date</td>
+				<td>@item.Total</td>
+				<td>@item.SalesTax</td>
+				<td>@item.TicketID</td>
+				<td>@item.PassType</td>
+				<td>@item.Essn</td>
+				<td>
+					<a class='btn btn-primary btn-sm' href="/TicketSales/Edit?receiptNumber=@item.ReceiptNumber">Edit</a>
+					<a class='btn btn-danger btn-sm' href="/TicketSales/Delete?receiptNumber=@item.ReceiptNumber">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
