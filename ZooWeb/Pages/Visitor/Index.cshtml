@@ -1,0 +1,31 @@
+﻿@page
+@model ZooWeb.Pages.Visitor.IndexModel
+@{
+}
+
+<br>
+<h2>List of Visitors</h2>
+<a class='btn btn-primary btn-sm' href="/Visitors/Create">New Visitor</a>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Phone Number</th>
+			<th>Birth Date</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.ListVisitors)
+		{
+			<tr>
+				<td>@item.FirstName @item.LastName</td>
+				<td>@item.PhoneNumber</td>
+				<td>@item.BirthDate.ToString("MM/dd/yyyy")</td>
+				<td>
+					<a class='btn btn-primary btn-sm' href="/Visitors/Edit?id=@item.Id">Edit</a>
+					<a class='btn btn-danger btn-sm' href="/Visitors/Delete?id=@item.Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
