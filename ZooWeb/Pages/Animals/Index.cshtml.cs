@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Numerics;
 
-namespace ZooWeb.Pages.Animal
+namespace ZooWeb.Pages.Animals
 {
     public class IndexModel : PageModel
     {

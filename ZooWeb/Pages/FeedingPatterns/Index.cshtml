@@ -1,0 +1,35 @@
+﻿@page
+@model ZooWeb.Pages.FeedingPatterns.IndexModel
+@{
+}
+
+<br>
+<h2>List of FeedingPatterns</h2>
+<a class='btn btn-primary btn-sm' href="/FeedingPatterns/Create">New Feeding Pattern</a>
+<table class="table">
+	<thead>
+        <tr>
+            <th>Animal ID</th>
+            <th>Meal</th>
+            <th>Portion</th>
+            <th>Feeding Days</th>
+            <th>Feeding Time</th>
+        </tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.listFeedingPatterns)
+		{
+            <tr>
+                <td>@item.Animal_ID</td>
+                <td>@item.Meal</td>
+                <td>@item.Portion</td>
+                <td>@item.Schedule_days</td>
+                <td>@item.Schedule_time</td>
+                <td>
+                    <a class='btn btn-primary btn-sm' href="/FeedingPatterns/Edit?id=@item.Animal_ID">Edit</a>
+                    <a class='btn btn-danger btn-sm' href="/FeedingPatterns/Delete?id=@item.Animal_ID">Delete</a>
+                </td>
+            </tr>
+		}
+	</tbody>
+</table>
