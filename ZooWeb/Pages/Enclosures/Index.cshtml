@@ -1,0 +1,33 @@
+﻿@page
+@model ZooWeb.Pages.Enclosures.IndexModel
+@{
+}
+
+<br>
+<h2>List of Enclosures</h2>
+<a class='btn btn-primary btn-sm' href="/Enclosures/Create">New Enclosure</a>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Location ID</th>
+			<th>Biome Type</th>
+			<th>Capacity</th>
+			<th>Number of Animals</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.listEnclosures)
+		{
+			<tr>
+				<td>@item.LocationID</td>
+				<td>@item.Type</td>
+				<td>@item.Capacity</td>
+				<td>@item.Occupant_Num</td>
+				<td>
+					<a class='btn btn-primary btn-sm' href="/Enclosures/Edit?id=@item.LocationID">Edit</a>
+					<a class='btn btn-danger btn-sm' href="/Enclosures/Delete?id=@item.LocationID">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

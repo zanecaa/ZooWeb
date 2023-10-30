@@ -1,0 +1,41 @@
+﻿@page
+@model ZooWeb.Pages.Animals.IndexModel
+@{
+}
+
+<br>
+<h2>List of Animals</h2>
+<a class='btn btn-primary btn-sm' href="/Animals/Create">New Animal</a>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Animal Id</th>
+			<th>Animal Name</th>
+			<th>Scientific Name</th>
+			<th>Common Name</th>
+			<th>Sex</th>
+			<th>Birth Date</th>
+			<th>Status</th>
+			<th>Location ID</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.listAnimals)
+		{
+			<tr>
+				<td>@item.Animal_Id</td>
+				<td>@item.Name</td>
+				<td>@item.Scientific_name</td>
+				<td>@item.Common_name</td>
+				<td>@item.Sex</td>
+				<td>@item.Birth_date</td>
+				<td>@item.Status</td>
+				<td>@item.Location_Id</td>
+				<td>
+					<a class='btn btn-primary btn-sm' href="/Animals/Edit?id=@item.Animal_Id">Edit</a>
+					<a class='btn btn-danger btn-sm' href="/Animals/Delete?id=@item.Animal_Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
