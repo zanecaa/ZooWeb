@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
 
-namespace ZooWeb.Pages.Employees
+namespace ZooWeb.Pages.Visitor
 {
     public class CreateModel : PageModel
     {
-        public EmployeeInfo info = new EmployeeInfo();
+        public VisitorInfo info = new VisitorInfo();
         public string errorMsg = "";
 		public string successMsg = "";
         public void OnGet()
@@ -17,14 +17,10 @@ namespace ZooWeb.Pages.Employees
         public void OnPost() 
         {
 			//must add check for null later
-			info.EmployeeId = Request.Form["Eid"];
-			info.Phone_num = Request.Form["Phone_num"];
-			info.Dno = Request.Form["Dno"];
-			info.Super_Eid = Request.Form["Super_Eid"];
-			info.Email = Request.Form["Email"];
-			info.Fname = Request.Form["Fname"];
-			info.Lname = Request.Form["Lname"];
-			info.Salary = Request.Form["Salary"];
+			info.PhoneNumber = Request.Form["PhoneNumber"];
+			info.FirstName = Request.Form["FirstName"];
+			info.LastName = Request.Form["LastName"];
+			info.BirthDate = Request.Form["BirthDate"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
@@ -44,19 +40,15 @@ namespace ZooWeb.Pages.Employees
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO employee VALUES (@EmployeeId, @Phone_num, @Dno, @Super_Eid, @Email, @Fname, @Lname, @Salary)";
+					string sql = "INSERT INTO visitor VALUES (@PhoneNumber, @FirstName, @LastName, @BirthDate)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@EmployeeId", int.Parse(info.EmployeeId));
-						command.Parameters.AddWithValue("@Phone_num", long.Parse(info.Phone_num));
-						command.Parameters.AddWithValue("@Dno", short.Parse(info.Dno));
-						command.Parameters.AddWithValue("@Super_Eid", long.Parse(info.Super_Eid));
-						command.Parameters.AddWithValue("@Email", info.Email);
-						command.Parameters.AddWithValue("@Fname", info.Fname);
-						command.Parameters.AddWithValue("@Lname", info.Lname);
-						command.Parameters.AddWithValue("@Salary", int.Parse(info.Salary));
-
+						command.Parameters.AddWithValue("@PhoneNumber", int.Parse(info.PhoneNumber));
+						command.Parameters.AddWithValue("@FirstName", long.Parse(info.FirstName));
+						command.Parameters.AddWithValue("@LastName", short.Parse(info.LastName));
+						command.Parameters.AddWithValue("@BirthDate", long.Parse(info.BirthDate));
+						
 						command.ExecuteNonQuery();
 					}
 				}

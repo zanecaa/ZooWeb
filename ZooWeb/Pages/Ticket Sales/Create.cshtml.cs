@@ -17,9 +17,9 @@ namespace ZooWeb.Pages.TicketSales
         public void OnPost() 
         {
 			//must add check for null later
-			info.TicketID = Request.Form["TicketId"];
+			info.TicketID = Request.Form["TicketID"];
 			info.PassType = Request.Form["PassType"];
-			info.EmployeeID = Request.Form["EmployeeId"];
+			info.EmployeeID = Request.Form["EmployeeID"];
 			info.VisitorPn = Request.Form["VisitorPn"];
 			info.Date = Request.Form["Date"];
 			info.Total = Request.Form["Total"];
@@ -44,7 +44,7 @@ namespace ZooWeb.Pages.TicketSales
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO employee VALUES (@EmployeeId, @Phone_num, @Dno, @Super_Eid, @Email, @Fname, @Lname, @Salary)";
+					string sql = "INSERT INTO ticket_sales VALUES (@TicketId, @PassType, @EmployeeId, @VisitorPn, @Date, @Total, @ReceiptNumber)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{

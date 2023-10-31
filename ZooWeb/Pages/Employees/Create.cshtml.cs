@@ -7,7 +7,7 @@ namespace ZooWeb.Pages.Employees
 {
     public class CreateModel : PageModel
     {
-        public EmployeeInfo info = new EmployeeInfo();
+		public EmployeeInfo info = new EmployeeInfo();
         public string errorMsg = "";
 		public string successMsg = "";
         public void OnGet()
@@ -17,6 +17,7 @@ namespace ZooWeb.Pages.Employees
         public void OnPost() 
         {
 			//must add check for null later
+
 			info.EmployeeId = Request.Form["Eid"];
 			info.Phone_num = Request.Form["Phone_num"];
 			info.Dno = Request.Form["Dno"];

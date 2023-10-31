@@ -1,5 +1,5 @@
 ﻿@page
-@model ZooWeb.Pages.Employees.CreateModel
+@model ZooWeb.Pages.Visitor.CreateModel
 @{
 }
 
@@ -17,54 +17,30 @@
 
 <form method="POST">
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Employee Id</label>
+		<label class="col-sm-3 col-form-label">Phone Number</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Eid" value="@Model.info.EmployeeId">
+			<input type="text" class="form-control" name="PhoneNumber" value="@Model.info.PhoneNumber">
 		</div>
 	</div>
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">First Name</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Fname" value="@Model.info.Fname">
+			<input type="text" class="form-control" name="Fname" value="@Model.info.FirstName">
 		</div>
 	</div>
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Last Name</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Lname" value="@Model.info.Lname">
+			<input type="text" class="form-control" name="Lname" value="@Model.info.LastName">
 		</div>
 	</div>
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Phone Number</label>
+		<label class="col-sm-3 col-form-label">BirthDate</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Phone_num" value="@Model.info.Phone_num">
+			<input type="text" class="form-control" name="BirthDate" value="@Model.info.BirthDate">
 		</div>
 	</div>
-	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Department</label>
-		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Dno" value="@Model.info.Dno">
-		</div>
-	</div>
-	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Supervisor Id</label>
-		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Super_Eid" value="@Model.info.Super_Eid">
-		</div>
-	</div>
-	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Email</label>
-		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Email" value="@Model.info.Email">
-		</div>
-	</div>
-	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Salary</label>
-		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Salary" value="@Model.info.Salary">
-		</div>
-	</div>
-
+	
 	@if (Model.successMsg.Length > 0)
 	{
 	<div class="row mb-3">
