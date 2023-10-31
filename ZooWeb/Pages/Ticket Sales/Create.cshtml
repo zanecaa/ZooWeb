@@ -1,0 +1,82 @@
+﻿@page
+@model ZooWeb.Pages.TicketSales.CreateModel
+@{
+}
+
+<br>
+<h2>New Employee</h2>
+<br>
+
+@if (Model.errorMsg.Length > 0)
+{
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		<strong>@Model.errorMsg</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+<form method="POST">
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Ticket ID</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="TicketId" value="@Model.info.TicketID">
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Pass Type</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="PassType" value="@Model.info.PassType">
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Employee ID</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="EmployeeId" value="@Model.info.EmployeeID">
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Visitor PN</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="VisitorPn" value="@Model.info.VisitorPn">
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Date</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="Date" value="@Model.info.Date">
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Total</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="Total" value="@Model.info.Total">
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Receipt Number</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="ReceiptNumber" value="@Model.info.ReceiptNumber">
+		</div>
+	</div>
+
+	@if (Model.successMsg.Length > 0)
+	{
+	<div class="row mb-3">
+		<div class="col-sm-9">
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
+				<strong>@Model.successMsg</strong>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		</div>
+	</div>
+	}
+
+	<div class="row mb-3">
+		<div class="offset-sm-3 col-sm-3 d-grid">
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+		<div class="col-sm-3 d-grid">
+			<a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+		</div>
+	</div>
+</form>
