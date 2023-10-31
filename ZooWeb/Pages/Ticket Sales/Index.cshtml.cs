@@ -25,13 +25,13 @@ namespace ZooWeb.Pages.TicketSales
 						while (reader.Read())
 						{
 							TicketSaleInfo info = new TicketSaleInfo();
-							info.ReceiptNumber = reader.GetInt32(0).ToString();
-							info.Date = reader.GetDateTime(1).ToString("yyyy-MM-dd");
-							info.Total = reader.GetDecimal(2).ToString();
-							info.SalesTax = reader.GetDecimal(3).ToString();
-							info.TicketID = reader.GetInt32(4).ToString();
-							info.PassType = reader.GetString(5);
-							info.Essn = reader.GetInt32(6).ToString();
+							info.TicketID = reader.GetInt32(0).ToString();
+							info.PassType = reader.GetString(1);
+							info.EmployeeID = reader.GetInt32(2).ToString();
+							info.VisitorPn = reader.GetInt64(3).ToString();
+							info.Date = reader.GetDateTime(4).ToString("yyyy-MM-dd");
+							info.Total = reader.GetDecimal(5).ToString();
+							info.ReceiptNumber = reader.GetInt64(6).ToString();
 
 							ListTicketSales.Add(info);
 						}
@@ -43,12 +43,12 @@ namespace ZooWeb.Pages.TicketSales
 
 	public class TicketSaleInfo
 	{
-		public string ReceiptNumber;
-		public string Date;
-		public string Total;
-		public string SalesTax;
 		public string TicketID;
 		public string PassType;
-		public string Essn;
+		public string EmployeeID;
+		public string VisitorPn;
+		public string Date;
+		public string Total;
+		public string ReceiptNumber;
 	}
 }

@@ -12,10 +12,10 @@
 			<th>Receipt Number</th>
 			<th>Date</th>
 			<th>Total</th>
-			<th>Sales Tax</th>
 			<th>Ticket ID</th>
 			<th>Pass Type</th>
-			<th>Employee SSN</th>
+			<th>Employee ID</th>
+			<th>Visitor Pn</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -25,10 +25,12 @@
 				<td>@item.ReceiptNumber</td>
 				<td>@item.Date</td>
 				<td>@item.Total</td>
-				<td>@item.SalesTax</td>
 				<td>@item.TicketID</td>
 				<td>@item.PassType</td>
-				<td>@item.Essn</td>
+				<td>@item.VisitorPn</td>
+				<td>@item.EmployeeID</td>
+
+
 				<td>
 					<a class='btn btn-primary btn-sm' href="/TicketSales/Edit?receiptNumber=@item.ReceiptNumber">Edit</a>
 					<a class='btn btn-danger btn-sm' href="/TicketSales/Delete?receiptNumber=@item.ReceiptNumber">Delete</a>
