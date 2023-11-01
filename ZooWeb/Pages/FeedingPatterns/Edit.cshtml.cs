@@ -5,15 +5,39 @@ using System.Reflection;
 
 namespace ZooWeb.Pages.FeedingPatterns
 {
-	public class CreateModel : PageModel
+	public class EditModel : PageModel
 	{
 		public FeedingPatternInfo info = new FeedingPatternInfo();
 		public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
 		{
-		}
+			String Animal_Id = Request.Query["id"];
+			// TODO: actually use this (addresses race condition)
+			if (Animal_Id == null || Animal_Id == "") { errorMsg = "y tho?"; return; };
 
+			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				String sql = "SELECT * FROM feeding_pattern WHERE Animal_ID=@Animal_Id";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					command.Parameters.AddWithValue("@Animal_Id", Animal_Id);
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							info.Animal_ID = reader.GetInt32(0).ToString();
+							info.Meal = reader.GetString(1);
+							info.Portion = reader.GetDecimal(2).ToString();
+							info.Schedule_days = reader.GetString(3);
+							info.Schedule_time = reader.GetTimeSpan(4).ToString();
+						}
+					}
+				}
+			}
+		}
 		public void OnPost()
 		{
 			//must add check for null later
@@ -28,7 +52,7 @@ namespace ZooWeb.Pages.FeedingPatterns
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (fieldValue == "" || fieldValue == null)
+				if ((fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -41,7 +65,9 @@ namespace ZooWeb.Pages.FeedingPatterns
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO Feeding_Pattern VALUES (@AnimalId, @Meal, @Portion, @ScheduleDays, @ScheduleTime)";
+					string sql = "UPDATE feeding_pattern " +
+						"SET Meal=@Meal, Portion=@Portion, Schedule_days=@ScheduleDays, Schedule_time=@ScheduleTime " +
+						"WHERE Animal_ID=@AnimalId";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
@@ -65,7 +91,7 @@ namespace ZooWeb.Pages.FeedingPatterns
 			{
 				field.SetValue(info, "");
 			}
-			successMsg = "New FeedingPattern Added";
+			successMsg = "Feeding Pattern Updated";
 
 			Response.Redirect("/FeedingPatterns/Index");
 		}

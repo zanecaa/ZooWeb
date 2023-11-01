@@ -14,7 +14,7 @@ namespace ZooWeb.Pages.Animals
 		{
 			String Animal_Id = Request.Query["id"];
 			// TODO: actually use this (addresses race condition)
-			if (Animal_Id == null || Animal_Id == "") { errorMsg = "why tho?"; return; };
+			if (Animal_Id == null || Animal_Id == "") { errorMsg = "y tho?"; return; };
 
 			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
@@ -28,7 +28,7 @@ namespace ZooWeb.Pages.Animals
 					{
 						if (reader.Read())
 						{
-							AnimalInfo info = new AnimalInfo();
+							//AnimalInfo info = new AnimalInfo();
 							info.Animal_Id = reader.GetInt32(0).ToString();
 							info.Name = reader.GetString(1);
 							info.Scientific_name = reader.GetString(2);
@@ -60,7 +60,7 @@ namespace ZooWeb.Pages.Animals
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (field.Name != "Animal_Id" && (fieldValue == "" || fieldValue == null))
+				if ((fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -107,7 +107,7 @@ namespace ZooWeb.Pages.Animals
 			{
 				field.SetValue(info, "");
 			}
-			successMsg = "New Animal Added";
+			successMsg = "Animal Updated";
 
 			Response.Redirect("/Animals/Index");
 		}
