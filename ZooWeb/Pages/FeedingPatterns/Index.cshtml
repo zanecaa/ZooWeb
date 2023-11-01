@@ -27,9 +27,20 @@
                 <td>@item.Schedule_time</td>
                 <td>
                     <a class='btn btn-primary btn-sm' href="/FeedingPatterns/Edit?id=@item.Animal_ID">Edit</a>
-                    <a class='btn btn-danger btn-sm' href="/FeedingPatterns/Delete?id=@item.Animal_ID">Delete</a>
+                    <a id='deleteAnchor_@item.Animal_ID' class='btn btn-danger btn-sm' onclick="confirmDelete(@item.Animal_ID, true)">Delete</a>
+
+                    <span id="confirmDeleteAnchor_@item.Animal_ID" style="display:none">
+                        <span>Are you sure you want to delete?</span>
+                        <a href="/FeedingPatterns/Delete?id=@item.Animal_ID" class="btn btn-danger">Yes</a>
+                        <a href="#" class="btn btn-primary"
+                           onclick="confirmDelete('@item.Animal_ID', false)">No</a>
+                    </span>
                 </td>
             </tr>
 		}
 	</tbody>
 </table>
+
+@section Scripts{
+    <script src="/Scripts/ConfirmDelete.js"></script>
+}

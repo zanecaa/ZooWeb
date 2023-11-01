@@ -25,9 +25,20 @@
 				<td>@item.Occupant_Num</td>
 				<td>
 					<a class='btn btn-primary btn-sm' href="/Enclosures/Edit?id=@item.LocationID">Edit</a>
-					<a class='btn btn-danger btn-sm' href="/Enclosures/Delete?id=@item.LocationID">Delete</a>
+					<a id='deleteAnchor_@item.LocationID' class='btn btn-danger btn-sm' onclick="confirmDelete(@item.LocationID, true)">Delete</a>
+
+					<span id="confirmDeleteAnchor_@item.LocationID" style="display:none">
+						<span>Are you sure you want to delete?</span>
+						<a href="/Enclosures/Delete?id=@item.LocationID" class="btn btn-danger">Yes</a>
+						<a href="#" class="btn btn-primary"
+						   onclick="confirmDelete('@item.LocationID', false)">No</a>
+					</span>
 				</td>
 			</tr>
 		}
 	</tbody>
 </table>
+
+@section Scripts{
+	<script src="/Scripts/ConfirmDelete.js"></script>
+}
