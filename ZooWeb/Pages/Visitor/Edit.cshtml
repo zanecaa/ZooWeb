@@ -1,0 +1,64 @@
+﻿@page
+@model ZooWeb.Pages.Visitor.EditModel
+@{
+}
+
+<br>
+<h2>Edit Visitor</h2>
+<br>
+
+@if (Model.errorMsg.Length > 0)
+{
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		<strong>@Model.errorMsg</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+<form method="POST">
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <input type="hidden" class="form-control" name="Phone Number" value="@Model.info.PhoneNumber">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">First Name Type</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="First Name" value="@Model.info.FirstName">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Last Name</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Last Name" value="@Model.info.LastName">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Birth Date</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Birth Date" value="@Model.info.BirthDate">
+        </div>
+    </div>
+
+
+    @if (Model.successMsg.Length > 0)
+	{
+    <div class="row mb-3">
+        <div class="col-sm-9">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>@Model.successMsg</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+	}
+
+    <div class="row mb-3">
+        <div class="offset-sm-3 col-sm-3 d-grid">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="col-sm-3 d-grid">
+            <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+        </div>
+    </div>
+</form>
