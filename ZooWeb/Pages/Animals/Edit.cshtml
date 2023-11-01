@@ -1,0 +1,87 @@
+﻿@page
+@model ZooWeb.Pages.Animals.EditModel
+@{
+}
+
+<br>
+<h2>Edit Animal</h2>
+<br>
+
+@if (Model.errorMsg.Length > 0)
+{
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		<strong>@Model.errorMsg</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+<form method="POST">
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <input type="hidden" class="form-control" name="Animal_Id" value="@Model.info.Animal_Id">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Animal Name</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Name" value="@Model.info.Name">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Scientific Name</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Scientific_name" value="@Model.info.Scientific_name">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Common Name</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Common_name" value="@Model.info.Common_name">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Sex</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Sex" value="@Model.info.Sex">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Birth Date</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Birth_date" value="@Model.info.Birth_date">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Status</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Status" value="@Model.info.Status">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Location ID</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Location_ID" value="@Model.info.Location_Id">
+        </div>
+    </div>
+
+    @if (Model.successMsg.Length > 0)
+	{
+    <div class="row mb-3">
+        <div class="col-sm-9">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>@Model.successMsg</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+	}
+
+    <div class="row mb-3">
+        <div class="offset-sm-3 col-sm-3 d-grid">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="col-sm-3 d-grid">
+            <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+        </div>
+    </div>
+</form>
