@@ -57,7 +57,7 @@ namespace ZooWeb.Pages.Animals
 						command.Parameters.AddWithValue("@Name", info.Name);
 						command.Parameters.AddWithValue("@Scientific_name", info.Scientific_name);
 						command.Parameters.AddWithValue("@Common_name", info.Common_name);
-						command.Parameters.AddWithValue("@Sex", (info.Sex == "Male"));
+						command.Parameters.AddWithValue("@Sex", (info.Sex == "male"));
 						command.Parameters.AddWithValue("@Birth_date", info.Birth_date);
 						command.Parameters.AddWithValue("@Status", info.Status);
 						command.Parameters.AddWithValue("@Location_ID", int.Parse(info.Location_Id));
