@@ -1,12 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
+<head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ZooWeb</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ZooWeb.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" runat="server" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" runat="server" />
+    <link rel="stylesheet" href="~/ZooWeb.styles.css" asp-append-version="true" runat="server" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server"/>
 </head>
 <body>
     <header>
