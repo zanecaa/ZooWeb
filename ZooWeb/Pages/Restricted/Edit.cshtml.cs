@@ -14,23 +14,23 @@ namespace ZooWeb.Pages.Restricted
 		public void OnGet()
 		{
 			string locationid = Request.Query["id"];
+
 			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT * FROM restricted WHERE Location_ID=@Location_ID";
+				String sql = "SELECT * FROM restricted WHERE Location_ID=@locationid";
 				using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-					command.Parameters.AddWithValue("@Location_ID", locationid);
+					command.Parameters.AddWithValue("@locationid", locationid);
 					using (SqlDataReader reader = command.ExecuteReader())
 					{
 						if (reader.Read())
 						{
-                            RestrictedInfo info = new RestrictedInfo();
                             info.Location_ID = reader.GetInt64(0).ToString();
-                            info.Close_date = reader.GetDateTime(1).ToString("yyyy-MM-dd HH:mm:ss");
-                            info.Reopen_date = reader.GetDateTime(2).ToString("yyyy-MM-dd HH:mm:ss");
-                        }
+                            info.Close_date = reader.GetDateTime(1).ToString();
+                            info.Reopen_date = reader.GetDateTime(2).ToString();
+						}
 					}
 				}
 			}
