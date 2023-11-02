@@ -57,7 +57,13 @@ namespace ZooWeb.Pages.ZooUsers
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if ((fieldValue == "" || fieldValue == null))
+				String acct_status = Request.Form["AccountDisabled"];
+				if (acct_status != "disabled" && acct_status != "enabled")
+				{
+					errorMsg = "Account Status must be \"enabled\" or \"disabled\", not whatever \"" + acct_status + "\" is...";
+					return;
+				}
+				if (field.Name != "UserId" && field.Name != "CreationDate" && (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -71,12 +77,12 @@ namespace ZooWeb.Pages.ZooUsers
 				{
 					connection.Open();
 					string sql = "UPDATE zoo_user " +
-						"SET Username=@Username, Password=@Password, AccountDisabled=@AccountDisabled, EmployeeId=@EmployeeId " +
+						"SET Username=@Username, Passwd=@Password, AccountDisabled=@AccountDisabled, EmployeeId=@EmployeeId " +
 						"WHERE UserId=@UserId";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-
+						command.Parameters.AddWithValue("@UserId", info.UserId);
 						command.Parameters.AddWithValue("@Username",info.Username);
 						command.Parameters.AddWithValue("@Password", info.Password);
 						command.Parameters.AddWithValue("@AccountDisabled", (info.AccountDisabled == "disabled"));
