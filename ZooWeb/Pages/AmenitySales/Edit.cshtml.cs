@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ZooWeb.Pages.Animals;
+using ZooWeb.Pages.AmenitySales;
 using System.Data.SqlClient;
 using System.Reflection;
 
@@ -68,8 +68,8 @@ namespace ZooWeb.Pages.AmenitySales
 				{
 					connection.Open();
 					string sql = "UPDATE AmenitySales " +
-						"SET Eid=@Eid, SaleType=@SaleType, SaleDate=@SaleDate, Total=@Total, ReceiptNumber=@ReceiptNumber" +
-						"WHERE LocationID=@LocationID";
+						"SET Eid=@Eid, SaleType=@SaleType, SaleDate=@SaleDate, Total=@Total, ReceiptNumber=@ReceiptNumber " +
+						"WHERE LocationID=@LocationId";
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@Eid", int.Parse(info.EID));
