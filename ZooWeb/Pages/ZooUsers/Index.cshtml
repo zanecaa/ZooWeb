@@ -22,7 +22,7 @@
 		{
             <tr>
                 <td>@item.UserId</td>
-                <td>@item.EmployeeId</td>
+                <td><a href="/Employees/Edit?id=@item.EmployeeId">@item.EmployeeId</a></td>
                 <td>@item.Username</td>
                 <td>@item.Password</td>
                 <td>@item.AccountDisabled</td>
@@ -32,7 +32,7 @@
                     <a id='deleteAnchor_@item.UserId' class='btn btn-danger btn-sm' onclick="confirmDelete(@item.UserId, true)">Delete</a>
 
                     <span id="confirmDeleteAnchor_@item.UserId" style="display:none">
-                        <span>Are you sure you want to enabled/disable?</span>
+                        <span>Are you sure you want to enable/disable?</span>
                         <a href="/ZooUsers/Delete?id=@item.UserId" class="btn btn-danger">Yes</a>
                         <a href="#" class="btn btn-primary"
                            onclick="confirmDelete('@item.UserId', false)">No</a>
@@ -44,4 +44,4 @@
 </table>
 
 
-<script src="~js/ConfirmDelete.js"></script>
+<script src="~/js/ConfirmDelete.js"></script>

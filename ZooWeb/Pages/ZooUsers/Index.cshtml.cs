@@ -29,9 +29,10 @@ namespace ZooWeb.Pages.ZooUsers
                             info.UserId = reader.GetInt32(0).ToString();
                             info.EmployeeId = reader.GetInt32(1).ToString();
                             info.Username = reader.GetString(2);
-                            info.Password = reader.GetString(3);
-                            byte[] accountStatusData = (byte[])reader["AccountDisabled"];
-                            if (accountStatusData[0] == 1) { info.AccountDisabled = "disabled"; } else { info.AccountDisabled = "enabled"; }
+                            //info.Password = reader.GetString(3);
+                            info.Password = "[REDACTED]";
+                            Boolean accountStatusData = (Boolean)reader["AccountDisabled"];
+                            if (accountStatusData) { info.AccountDisabled = "disabled"; } else { info.AccountDisabled = "enabled"; }
 							info.CreationDate = reader.GetDateTime(5).ToString();
                             
 							listZooUsers.Add(info);

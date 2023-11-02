@@ -12,18 +12,19 @@ namespace ZooWeb.Pages.ZooUsers
 		public string successMsg = "";
 		public void OnGet()
 		{
-			String Animal_Id = Request.Query["id"];
+			String UserId = Request.Query["id"];
 			// TODO: actually use this (addresses race condition)
-			if (Animal_Id == null || Animal_Id == "") { errorMsg = "y tho?"; return; };
+			if (UserId == null || UserId == "") { errorMsg = "y tho?"; return; };
 
 			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT * FROM feeding_pattern WHERE Animal_ID=@Animal_Id";
+				String sql = "SELECT * FROM zoo_user " +
+					"WHERE UserId=@UserId";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
-					command.Parameters.AddWithValue("@Animal_Id", Animal_Id);
+					command.Parameters.AddWithValue("@UserId", UserId);
 					using (SqlDataReader reader = command.ExecuteReader())
 					{
 						if (reader.Read())
@@ -31,8 +32,8 @@ namespace ZooWeb.Pages.ZooUsers
 							info.UserId = reader.GetInt32(0).ToString();
 							info.Username = reader.GetString(1);
 							info.Password = reader.GetString(2);
-							byte[] accountStatusData = (byte[])reader["AccountDisabled"];
-							if (accountStatusData[0] == 1) { info.AccountDisabled = "disabled"; }
+							Boolean accountStatusData = (Boolean)reader["AccountDisabled"];
+							if (accountStatusData) { info.AccountDisabled = "disabled"; }
 							else { info.AccountDisabled = "enabled";  }							
 							info.CreationDate = reader.GetDateTime(4).ToString();
 							info.EmployeeId = reader.GetInt32(5).ToString();

@@ -27,9 +27,10 @@ namespace ZooWeb.Pages.ZooUsers
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (Request.Form["AccountDisabled"] != "disabled" && Request.Form["AccountDisabled"] != "enabled")
+				String acct_status = Request.Form["AccountDisabled"];
+				if (acct_status != "disabled" && acct_status != "enabled")
 				{
-					errorMsg = "Account Status must be \"enabled\" or \"disabled\"";
+					errorMsg = "Account Status must be \"enabled\" or \"disabled\", not whatever \"" + acct_status + "\" is...";
 					return;
 				}
 				if (field.Name != "UserId" && field.Name != "CreationDate" && (fieldValue == "" || fieldValue == null))
