@@ -63,9 +63,9 @@ namespace ZooWeb.Pages.Visitor
 			{
 				field.SetValue(info, "");
 			}
-			successMsg = "New Employee Added";
+			successMsg = "New Visitor Added";
 
-			Response.Redirect("/Employees/Index");
+			Response.Redirect("/Visitor/Index");
 		}
     }
 }
