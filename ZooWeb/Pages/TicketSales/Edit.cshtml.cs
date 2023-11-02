@@ -20,7 +20,7 @@ namespace ZooWeb.Pages.TicketSales
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT * FROM ticket_sales WHERE TicketID=@TicketId";
+				String sql = "SELECT * FROM ticket_sales WHERE Ticket_ID=@TicketId";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.Parameters.AddWithValue("@TicketID", TicketSaleID);
