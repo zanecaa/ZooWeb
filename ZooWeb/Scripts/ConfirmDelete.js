@@ -1,4 +1,4 @@
-// https://groovetechnology.com/blog/how-to-use-javascript-in-asp-net-web-forms/
+// https://groovetechnology.com/blog/how-to-use-javascript-in-asp-net-web-forms
 function confirmDelete(uniqueId, isDeleteClicked) {
 	var deleteAnchor = 'deleteAnchor_' + uniqueId;
 	var confirmDeleteAnchor = 'confirmDeleteAnchor_' + uniqueId;

@@ -12,11 +12,13 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Scripts")),
-    RequestPath = "/Scripts"
-});
+
+app.UseStaticFiles();
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Scripts")),
+//RequestPath = "/Scripts"
+//});
 
 app.UseRouting();
 
