@@ -17,12 +17,12 @@ namespace ZooWeb.Pages.AmenitySales
 		public void OnPost()
 		{
 
-			info.EID = Request.Form["Employee_ID"];
-			info.LocationID = Request.Form["Location_ID"];
-			info.SaleType = Request.Form["Sale_type"];
-			info.SaleDate = Request.Form["Sale_date"];
+			info.EID = Request.Form["Eid"];
+			info.LocationID = Request.Form["LocationID"];
+			info.SaleType = Request.Form["SaleType"];
+			info.SaleDate = Request.Form["SaleDate"];
 			info.Total = Request.Form["Total"];
-			info.ReceiptNumber = Request.Form["Receipt_number"];
+			info.ReceiptNumber = Request.Form["ReceiptNumber"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
@@ -50,7 +50,7 @@ namespace ZooWeb.Pages.AmenitySales
 						command.Parameters.AddWithValue("@LocationID", int.Parse(info.LocationID));
 						command.Parameters.AddWithValue("@SaleType", info.SaleType);
 						command.Parameters.AddWithValue("@SaleDate", info.SaleDate);
-						command.Parameters.AddWithValue("@Total", decimal.Parse(info.Total));
+						command.Parameters.AddWithValue("@Total", info.Total);
 						command.Parameters.AddWithValue("@ReceiptNumber", int.Parse(info.ReceiptNumber));
 
 						command.ExecuteNonQuery();
