@@ -1,10 +1,10 @@
 ﻿@page
-@model ZooWeb.Pages.FeedingPatterns.EditModel
+@model ZooWeb.Pages.ZooUsers.EditModel
 @{
 }
 
 <br>
-<h2>Edit Feeding Pattern</h2>
+<h2>Edit Animal</h2>
 <br>
 
 @if (Model.errorMsg.Length > 0)
@@ -18,31 +18,37 @@
 <form method="POST">
     <div class="row mb-3">
         <div class="col-sm-6">
-            <input type="hidden" class="form-control" name="AnimalId" value="@Model.info.Animal_ID">
+            <input type="hidden" class="form-control" name="UserId" value="@Model.info.UserId">
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Meal</label>
+        <label class="col-sm-3 col-form-label">Username</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="Meal" value="@Model.info.Meal">
+            <input type="text" class="form-control" name="Username" value="@Model.info.Username">
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Portion</label>
+        <label class="col-sm-3 col-form-label">Password</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="Portion" value="@Model.info.Portion">
+            <input type="password" class="form-control" name="Password" value="@Model.info.Password">
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Feeding Days</label>
+        <label class="col-sm-3 col-form-label">Account Status</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="ScheduleDays" value="@Model.info.Schedule_days">
+            <input type="text" class="form-control" name="AccountDisabled" value="@Model.info.AccountDisabled">
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Feeding Time</label>
+        <label class="col-sm-3 col-form-label">Creation Date</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="ScheduleTime" value="@Model.info.Schedule_time">
+            <input type="text" class="form-control" name="CreationDate" value="@Model.info.CreationDate" disabled>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Employee ID</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="EmployeeId" value="@Model.info.EmployeeId">
         </div>
     </div>
 

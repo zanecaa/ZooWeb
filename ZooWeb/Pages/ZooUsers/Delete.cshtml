@@ -1,0 +1,42 @@
+@page
+@using System.Data.SqlClient;
+
+@{
+	// is OnGet/OnPost relevant here?
+	try{
+		String UserId = Request.Query["id"];
+		string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+		using (SqlConnection connection = new SqlConnection(connectionString))
+		{
+			connection.Open();
+			Boolean status = true;
+			String query = "SELECT AccountDisabled FROM zoo_user WHERE UserId=@UserId";
+			String toggle = "UPDATE zoo_user SET AccountDisabled=@status WHERE UserId=@UserId";
+
+			using (SqlCommand command = new SqlCommand(query, connection)){
+				command.Parameters.AddWithValue("@UserId", UserId);
+				
+				using (SqlDataReader reader = command.ExecuteReader())
+				{
+					if (reader.Read())
+					{
+						Boolean accountStatus = (Boolean)reader["AccountDisabled"];
+						status = !accountStatus;
+					}
+				}
+
+			}
+			using (SqlCommand command = new SqlCommand(toggle, connection))
+			{
+				command.Parameters.AddWithValue("@UserId", UserId);
+				command.Parameters.AddWithValue("@status", status);
+				command.ExecuteNonQuery();
+			}
+		}
+	}
+	catch(Exception ex)
+	{
+		
+	}
+	Response.Redirect("/ZooUsers/Index");
+}
