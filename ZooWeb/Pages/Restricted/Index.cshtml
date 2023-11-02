@@ -1,0 +1,31 @@
+﻿@page
+@model ZooWeb.Pages.Restricted.IndexModel
+@{
+}
+
+<br>
+<h2>List of Restrictions</h2>
+<a class='btn btn-primary btn-sm' href="/Restricted/Create">New Restriction</a>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Location ID</th>
+			<th>Close Date</th>
+			<th>Reopen Date</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var item in Model.Restrictions)
+		{
+			<tr>
+				<td>@item.Location_ID</td>
+				<td>@item.Close_date</td>
+				<td>@item.Reopen_date</td>
+				<td>
+					<a class='btn btn-primary btn-sm' href="/Restricted/Edit?id=@item.Location_ID">Edit</a>
+					<a class='btn btn-danger btn-sm' href="/Restricted/Delete?id=@item.Location_ID">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
