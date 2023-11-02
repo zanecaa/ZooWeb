@@ -70,7 +70,7 @@ namespace ZooWeb.Pages.Visitor
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-                        command.Parameters.AddWithValue("@PhoneNumber", int.Parse(info.PhoneNumber));
+                        command.Parameters.AddWithValue("@PhoneNumber", long.Parse(info.PhoneNumber));
                         command.Parameters.AddWithValue("@FirstName", long.Parse(info.FirstName));
                         command.Parameters.AddWithValue("@LastName", short.Parse(info.LastName));
                         command.Parameters.AddWithValue("@BirthDate", long.Parse(info.BirthDate));
