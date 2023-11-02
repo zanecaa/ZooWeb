@@ -15,11 +15,7 @@
 }
 
 <form method="POST">
-	<div class="row mb-3">
-		<div class="col-sm-6">
-			<input type="hidden" class="form-control" name="LocationID" value="@Model.info.LocationID">
-		</div>
-	</div>
+	<input type="hidden" name="Location_ID" value="@Model.info.LocationID">
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Employee ID</label>
 		<div class="col-sm-6">
@@ -29,19 +25,19 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Location ID</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Location_ID" value="@Model.info.LocationID">
+			<input type="text" class="form-control" name="LocationID" value="@Model.info.LocationID">
 		</div>
 	</div>
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Sale Type</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Sale_type" value="@Model.info.SaleType">
+			<input type="text" class="form-control" name="SaleType" value="@Model.info.SaleType">
 		</div>
 	</div>
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Sale Date</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Sale_date" value="@Model.info.SaleDate">
+			<input type="text" class="form-control" name="SaleDate" value="@Model.info.SaleDate">
 		</div>
 	</div>
 	<div class="row mb-3">
@@ -53,7 +49,7 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Receipt Number</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Receipt_number" value="@Model.info.ReceiptNumber">
+			<input type="text" class="form-control" name="ReceiptNumber" value="@Model.info.ReceiptNumber">
 		</div>
 	</div>
 

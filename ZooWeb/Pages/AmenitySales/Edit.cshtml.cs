@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ZooWeb.Pages.AmenitySales;
 using System.Data.SqlClient;
 using System.Reflection;
+using Microsoft.CodeAnalysis;
 
 namespace ZooWeb.Pages.AmenitySales
 {
@@ -13,17 +14,17 @@ namespace ZooWeb.Pages.AmenitySales
 		public string successMsg = "";
 		public void OnGet()
         {
-			String LocationId = Request.Query["id"];
-			if (LocationId == null || LocationId == "") { errorMsg = "y tho?"; return; };
+			String Location_ID = Request.Query["id"];
+			if (Location_ID == null || Location_ID == "") { errorMsg = "y tho?"; return; };
 
 			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT * FROM amenitySales WHERE LocationID=@LocationId";
+				String sql = "SELECT * FROM amenitySales WHERE LocationID=@Location_ID";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
-					command.Parameters.AddWithValue("@LocationId", LocationId);
+					command.Parameters.AddWithValue("@Location_ID", Location_ID);
 					using (SqlDataReader reader = command.ExecuteReader())
 					{
 						if (reader.Read())
@@ -42,12 +43,13 @@ namespace ZooWeb.Pages.AmenitySales
 		public void OnPost()
 		{
 
-			info.EID = Request.Form["Employee_ID"];
+
+			info.EID = Request.Form["EID"];
 			info.LocationID = Request.Form["Location_ID"];
-			info.SaleType = Request.Form["Sale_type"];
-			info.SaleDate = Request.Form["Sale_date"];
+			info.SaleType = Request.Form["SaleType"];
+			info.SaleDate = Request.Form["SaleDate"];
 			info.Total = Request.Form["Total"];
-			info.ReceiptNumber = Request.Form["Receipt_number"];
+			info.ReceiptNumber = Request.Form["ReceiptNumber"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
@@ -68,8 +70,8 @@ namespace ZooWeb.Pages.AmenitySales
 				{
 					connection.Open();
 					string sql = "UPDATE AmenitySales " +
-						"SET Eid=@Eid, SaleType=@SaleType, SaleDate=@SaleDate, Total=@Total, ReceiptNumber=@ReceiptNumber " +
-						"WHERE LocationID=@LocationId";
+						"SET EID=@EID, SaleType=@SaleType, SaleDate=@SaleDate, Total=@Total, ReceiptNumber=@ReceiptNumber " +
+						"WHERE LocationID=@LocationID";
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@Eid", int.Parse(info.EID));

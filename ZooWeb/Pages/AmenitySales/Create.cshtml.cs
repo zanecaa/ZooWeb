@@ -17,7 +17,7 @@ namespace ZooWeb.Pages.AmenitySales
 		public void OnPost()
 		{
 
-			info.EID = Request.Form["Eid"];
+			info.EID = Request.Form["EID"];
 			info.LocationID = Request.Form["LocationID"];
 			info.SaleType = Request.Form["SaleType"];
 			info.SaleDate = Request.Form["SaleDate"];
@@ -42,11 +42,11 @@ namespace ZooWeb.Pages.AmenitySales
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO amenitySales VALUES (@Eid, @LocationID, @SaleType, @SaleDate, @Total, @ReceiptNumber)";
+					string sql = "INSERT INTO amenitySales VALUES (@EID, @LocationID, @SaleType, @SaleDate, @Total, @ReceiptNumber)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@Eid", int.Parse(info.EID));
+						command.Parameters.AddWithValue("@EID", int.Parse(info.EID));
 						command.Parameters.AddWithValue("@LocationID", int.Parse(info.LocationID));
 						command.Parameters.AddWithValue("@SaleType", info.SaleType);
 						command.Parameters.AddWithValue("@SaleDate", info.SaleDate);
