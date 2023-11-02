@@ -101,7 +101,7 @@ namespace ZooWeb.Pages.TicketSales
 			}
 			successMsg = "Ticket Sales Updated";
 
-			Response.Redirect("/TicketSales/Index");
+			Response.Redirect("/Ticket Sales/Index");
 		}
 	}
 }
