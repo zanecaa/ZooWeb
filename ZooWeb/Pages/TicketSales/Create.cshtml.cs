@@ -48,9 +48,9 @@ namespace ZooWeb.Pages.TicketSales
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@TicketId", int.Parse(info.TicketID));
+						command.Parameters.AddWithValue("@TicketID", int.Parse(info.TicketID));
 						command.Parameters.AddWithValue("@PassType", long.Parse(info.PassType));
-						command.Parameters.AddWithValue("@EmployeeId", short.Parse(info.EmployeeID));
+						command.Parameters.AddWithValue("@EmployeeID", short.Parse(info.EmployeeID));
 						command.Parameters.AddWithValue("@VisitorPn", long.Parse(info.VisitorPn));
 						command.Parameters.AddWithValue("@Date", info.Date);
 						command.Parameters.AddWithValue("@Total", info.Total);
@@ -70,9 +70,9 @@ namespace ZooWeb.Pages.TicketSales
 			{
 				field.SetValue(info, "");
 			}
-			successMsg = "New Employee Added";
+			successMsg = "New Ticket Added";
 
-			Response.Redirect("/Employees/Index");
+			Response.Redirect("/Ticket Sales/Index");
 		}
     }
 }

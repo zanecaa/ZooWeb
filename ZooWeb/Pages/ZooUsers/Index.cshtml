@@ -1,0 +1,47 @@
+﻿@page
+@model ZooWeb.Pages.ZooUsers.IndexModel
+@{
+}
+
+<br>
+<h2>List of Zoo Users</h2>
+<a class='btn btn-primary btn-sm' href="/ZooUsers/Create">New User</a>
+<table class="table">
+	<thead>
+        <tr>
+            <th>User ID</th>
+            <th>Employee ID</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Account Status</th>
+            <th>Creation Date</th>
+        </tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.listZooUsers)
+		{
+            <tr>
+                <td>@item.UserId</td>
+                <td><a href="/Employees/Edit?id=@item.EmployeeId">@item.EmployeeId</a></td>
+                <td>@item.Username</td>
+                <td>@item.Password</td>
+                <td>@item.AccountDisabled</td>
+                <td>@item.CreationDate</td>
+                <td>
+                    <a class='btn btn-primary btn-sm' href="/ZooUsers/Edit?id=@item.UserId">Edit</a>
+                    <a id='deleteAnchor_@item.UserId' class='btn btn-danger btn-sm' onclick="confirmDelete(@item.UserId, true)">Delete</a>
+
+                    <span id="confirmDeleteAnchor_@item.UserId" style="display:none">
+                        <span>Are you sure you want to enable/disable?</span>
+                        <a href="/ZooUsers/Delete?id=@item.UserId" class="btn btn-danger">Yes</a>
+                        <a href="#" class="btn btn-primary"
+                           onclick="confirmDelete('@item.UserId', false)">No</a>
+                    </span>
+                </td>
+            </tr>
+		}
+	</tbody>
+</table>
+
+
+<script src="~/js/ConfirmDelete.js"></script>
