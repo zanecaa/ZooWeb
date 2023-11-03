@@ -41,12 +41,13 @@ namespace ZooWeb.Pages.Visitor
 		public void OnPost()
 		{
             //must add check for null later
-            info.PhoneNumber = Request.Form["PhoneNumber"];
+            info.PhoneNumber = Request.Query["id"];
+			//System.Diagnostics.Debug.WriteLine(info.PhoneNumber);
             info.FirstName = Request.Form["FirstName"];
-            info.LastName = Request.Form["LastName"];
-            info.BirthDate = Request.Form["BirthDate"];
+			info.LastName = Request.Form["LastName"];
+			info.BirthDate = Request.Form["BirthDate"];
 
-            FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
 			foreach (FieldInfo field in fields)
 			{
@@ -70,7 +71,7 @@ namespace ZooWeb.Pages.Visitor
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-                        command.Parameters.AddWithValue("@PhoneNumber", int.Parse(info.PhoneNumber));
+                        command.Parameters.AddWithValue("@PhoneNumber", long.Parse(info.PhoneNumber));
                         command.Parameters.AddWithValue("@FirstName", long.Parse(info.FirstName));
                         command.Parameters.AddWithValue("@LastName", short.Parse(info.LastName));
                         command.Parameters.AddWithValue("@BirthDate", long.Parse(info.BirthDate));

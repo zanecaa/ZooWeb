@@ -8,15 +8,18 @@
 		using (SqlConnection connection = new SqlConnection(connectionString))
 		{
 			connection.Open();
-			String sql = "DELETE visitor WHERE PhoneNumber=@PhoneNumber";
-			
+			String sql = "DELETE FROM visitor WHERE PhoneNumber=@PhoneNumber";
+
 			using (SqlCommand command = new SqlCommand(sql, connection)){
 				command.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
-			
+
 				command.ExecuteNonQuery();
 			}
 		}
 	}
-	catch(Exception ex){}
+	catch(Exception ex)
+	{
+		System.Diagnostics.Debug.WriteLine(ex.Message);
+	}
 	Response.Redirect("/Visitor/Index");
 }
