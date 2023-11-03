@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Numerics;
 
 namespace ZooWeb.Pages.Animals
 {
-    public class IndexModel : PageModel
+	[Authorize(Policy = "admin")]
+	public class IndexModel : PageModel
     {
         public List<AnimalInfo> listAnimals = new List<AnimalInfo>();
         public void OnGet()

@@ -1,15 +1,19 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
 using System.Numerics;
 
 namespace ZooWeb.Pages.Employees
 {
+    [Authorize(Policy = "admin")]
     public class IndexModel : PageModel
     {
         public List<EmployeeInfo> listEmployees = new List<EmployeeInfo>();
         public void OnGet()
         {
+
             //try
             //
                 string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";

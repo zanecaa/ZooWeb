@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Numerics;
 
 namespace ZooWeb.Pages.Enclosures
 {
-    public class IndexModel : PageModel
+	[Authorize(Policy = "admin")]
+	public class IndexModel : PageModel
     {
         public List<EnclosureInfo> listEnclosures = new List<EnclosureInfo>();
         public void OnGet()

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Data.SqlClient;
 
 namespace ZooWeb.Pages.TicketSales
 {
+	[Authorize(Policy = "admin")]
 	public class IndexModel : PageModel
 	{
 		public List<TicketSaleInfo> ListTicketSales = new List<TicketSaleInfo>();

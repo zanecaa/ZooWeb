@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZooWeb.Pages.Visitor
 {
+	[Authorize(Policy = "admin")]
 	public class IndexModel : PageModel
 	{
 		public List<VisitorInfo> ListVisitors = new List<VisitorInfo>();

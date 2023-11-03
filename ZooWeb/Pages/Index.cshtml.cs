@@ -15,7 +15,7 @@ namespace ZooWeb.Pages
         [BindProperty]
         public string Password { get; set; }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             
             // Validate username and password
@@ -25,20 +25,15 @@ namespace ZooWeb.Pages
                 //indicate the user is authenticated.
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, Username),
+                    //new Claim(ClaimTypes.Name, "admin"),
+                    new Claim("user", "admin"),
                     // Add other claims as needed
                 };
 
-                var claimsIdentity = new ClaimsIdentity(claims, "login");
-                var authProperties = new AuthenticationProperties
-                {
-                    IsPersistent = true,
-                };
+                var identity = new ClaimsIdentity(claims, "admin");
+                ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
-                HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity),
-                    authProperties);
+                await HttpContext.SignInAsync("admin", claimsPrincipal);
 
                 // Redirect to the main page if login is successful
                 return RedirectToPage("/Privacy");

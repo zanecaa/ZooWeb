@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
@@ -6,6 +7,7 @@ using System.Numerics;
 
 namespace ZooWeb.Pages.Department
 {
+	[Authorize(Policy = "admin")]
 	public class IndexModel : PageModel
 	{
 		public List<DepartmentInfo> ListDepartment = new List<DepartmentInfo>();
