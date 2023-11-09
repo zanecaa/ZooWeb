@@ -15,45 +15,43 @@
                 <a class="navbar-brand" asp-area="" asp-page="/Index">ZooWeb</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Home">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Employees/Index">Employees</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarAdmin" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Admin</a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarAdmin">
+                                <a class="dropdown-item" asp-area="" asp-page="/Employees/Index">Employees</a>
+                                <a class="dropdown-item " asp-area="" asp-page="/Department/Index">Departments</a>
+                                <a class="dropdown-item " asp-area="" asp-page="/Visitor/Index">Visitors</a>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Animals/Index">Animals</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarZookeeper" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Zookeeper</a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarZookeeper">
+                                <a class="dropdown-item" asp-area="" asp-page="/Animals/Index">Animals</a>
+                                <a class="dropdown-item " asp-area="" asp-page="/Enclosures/Index">Enclosures</a>
+                                <a class="dropdown-item " asp-area="" asp-page="/FeedingPatterns/Index">Feeding</a>
+                                <a class="dropdown-item " asp-area="" asp-page="/Restricted/Index">Restricted</a>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Enclosures/Index">Enclosures</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/FeedingPatterns/Index">Feeding Pattern</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Visitor/Index">Visitors</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/TicketSales/Index">Ticket Sales</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/AmenitySales/Index">Amenity Sales</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Revenue/Index">Revenue</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Department/Index">Department</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Restricted/Index">Restricted</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarSales" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sales</a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarSales">
+                                <a class="dropdown-item" asp-area="" asp-page="/Revenue/Index">Revenue</a>
+                                <a class="dropdown-item " asp-area="" asp-page="/TicketSales/Index">Ticket</a>
+                                <a class="dropdown-item " asp-area="" asp-page="/AmenitySales/Index">Amenity</a>
+                            </div>
                         </li>
                     </ul>
                 </div>

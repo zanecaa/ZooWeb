@@ -36,7 +36,7 @@ namespace ZooWeb.Pages
                 await HttpContext.SignInAsync("admin", claimsPrincipal);
 
                 // Redirect to the main page if login is successful
-                return RedirectToPage("/Privacy");
+                return RedirectToPage("/Home");
             }
             else
             {
