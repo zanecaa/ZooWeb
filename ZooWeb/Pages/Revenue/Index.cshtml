@@ -1,0 +1,29 @@
+﻿@page
+@model ZooWeb.Pages.Revenue.IndexModel
+@{
+}
+
+<br>
+<h2>Revenue</h2>
+<a class='btn btn-primary btn-sm' href="/Revenue/Report">Revenue Report</a>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Total</th>
+			<th>Source</th>
+			<th>Receipt Number</th>
+			<th>Date</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var item in Model.listRevenue)
+		{
+			<tr>
+				<td>@item.Total</td>
+				<td>@item.ReceiptSource</td>
+				<td>@item.ReceiptNum</td>
+				<td>@item.RevenueDate</td>
+			</tr>
+		}
+	</tbody>
+</table>
