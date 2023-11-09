@@ -22,10 +22,8 @@
 		{
             <tr>
                 <td>@item.UserId</td>
-                <td><a href="/Employees/Edit?id=@item.EmployeeId">@item.EmployeeId</a></td>
                 <td>@item.Username</td>
-                <td>@item.Password</td>
-                <td>@item.AccountDisabled</td>
+                <td>@item.IsActive</td>
                 <td>@item.CreationDate</td>
                 <td>
                     <a class='btn btn-primary btn-sm' href="/ZooUsers/Edit?id=@item.UserId">Edit</a>

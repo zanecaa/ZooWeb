@@ -16,9 +16,8 @@ namespace ZooWeb.Pages.ZooUsers
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                String sql = "SELECT UserID, e.EmployeeId, Username, Passwd, AccountDisabled, CreationDate " 
-                    + "FROM zoo_user AS u, employee AS e "
-                    + "WHERE u.EmployeeId = e.EmployeeId";
+                String sql = "SELECT UserID, Username, IsActive, CreationDate " 
+                    + "FROM zoo_user";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -27,13 +26,12 @@ namespace ZooWeb.Pages.ZooUsers
                         {
                             ZooUserInfo info = new ZooUserInfo();
                             info.UserId = reader.GetInt32(0).ToString();
-                            info.EmployeeId = reader.GetInt32(1).ToString();
-                            info.Username = reader.GetString(2);
+                            info.Username = reader.GetString(1);
                             //info.Password = reader.GetString(3);
-                            info.Password = "[REDACTED]";
-                            Boolean accountStatusData = (Boolean)reader["AccountDisabled"];
-                            if (accountStatusData) { info.AccountDisabled = "disabled"; } else { info.AccountDisabled = "enabled"; }
-							info.CreationDate = reader.GetDateTime(5).ToString();
+                            //info.Password = "[REDACTED]";
+                            Boolean accountStatusData = (Boolean)reader["IsActive"];
+                            if (accountStatusData) { info.IsActive = "enabled"; } else { info.IsActive = "disabled"; }
+							info.CreationDate = reader.GetDateTime(3).ToString();
                             
 							listZooUsers.Add(info);
                         }
@@ -46,10 +44,9 @@ namespace ZooWeb.Pages.ZooUsers
     public class ZooUserInfo
     {
         public string UserId;
-        public string EmployeeId;
         public string Username;
-        public string Password;
-        public string AccountDisabled;
+        public string PasswordHash;
+        public string IsActive;
         public string CreationDate;   
     }
 }

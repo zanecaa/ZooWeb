@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
+using Isopoh.Cryptography.Argon2;
 
 namespace ZooWeb.Pages.ZooUsers
 {
@@ -31,12 +32,11 @@ namespace ZooWeb.Pages.ZooUsers
 						{
 							info.UserId = reader.GetInt32(0).ToString();
 							info.Username = reader.GetString(1);
-							info.Password = reader.GetString(2);
-							Boolean accountStatusData = (Boolean)reader["AccountDisabled"];
-							if (accountStatusData) { info.AccountDisabled = "disabled"; }
-							else { info.AccountDisabled = "enabled";  }							
+							info.PasswordHash = reader.GetString(2);
+							Boolean accountStatusData = (Boolean)reader["IsActive"];
+							if (accountStatusData) { info.IsActive = "enabled"; }
+							else { info.IsActive = "disabled";  }							
 							info.CreationDate = reader.GetDateTime(4).ToString();
-							info.EmployeeId = reader.GetInt32(5).ToString();
 						}
 					}
 				}
@@ -47,17 +47,16 @@ namespace ZooWeb.Pages.ZooUsers
 			//must add check for null later
 			info.UserId = Request.Form["UserId"];
 			info.Username = Request.Form["Username"];
-			info.Password = Request.Form["Password"];
-			info.AccountDisabled = Request.Form["AccountDisabled"];
+			info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
+			info.IsActive = Request.Form["Status"];
 			info.CreationDate = Request.Form["CreationDate"];
-			info.EmployeeId = Request.Form["EmployeeId"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				String acct_status = Request.Form["AccountDisabled"];
+				String acct_status = Request.Form["Status"];
 				if (acct_status != "disabled" && acct_status != "enabled")
 				{
 					errorMsg = "Account Status must be \"enabled\" or \"disabled\", not whatever \"" + acct_status + "\" is...";
@@ -77,17 +76,16 @@ namespace ZooWeb.Pages.ZooUsers
 				{
 					connection.Open();
 					string sql = "UPDATE zoo_user " +
-						"SET Username=@Username, Passwd=@Password, AccountDisabled=@AccountDisabled, EmployeeId=@EmployeeId " +
+						"SET Username=@Username, PasswordHash=@Password, IsActive=@Status " +
 						"WHERE UserId=@UserId";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@UserId", info.UserId);
 						command.Parameters.AddWithValue("@Username",info.Username);
-						command.Parameters.AddWithValue("@Password", info.Password);
-						command.Parameters.AddWithValue("@AccountDisabled", (info.AccountDisabled == "disabled"));
+						command.Parameters.AddWithValue("@Password", info.PasswordHash);
+						command.Parameters.AddWithValue("@Status", (info.IsActive == "enabled"));
 						//command.Parameters.AddWithValue("@CreationDate", info.CreationDate);
-						command.Parameters.AddWithValue("@EmployeeId", info.EmployeeId);
 
 						command.ExecuteNonQuery();
 					}

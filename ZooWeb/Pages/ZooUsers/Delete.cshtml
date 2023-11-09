@@ -10,8 +10,8 @@
 		{
 			connection.Open();
 			Boolean status = true;
-			String query = "SELECT AccountDisabled FROM zoo_user WHERE UserId=@UserId";
-			String toggle = "UPDATE zoo_user SET AccountDisabled=@status WHERE UserId=@UserId";
+			String query = "SELECT IsActive FROM zoo_user WHERE UserId=@UserId";
+			String toggle = "UPDATE zoo_user SET IsActive=@status WHERE UserId=@UserId";
 
 			using (SqlCommand command = new SqlCommand(query, connection)){
 				command.Parameters.AddWithValue("@UserId", UserId);
@@ -20,7 +20,7 @@
 				{
 					if (reader.Read())
 					{
-						Boolean accountStatus = (Boolean)reader["AccountDisabled"];
+						Boolean accountStatus = (Boolean)reader["IsActive"];
 						status = !accountStatus;
 					}
 				}

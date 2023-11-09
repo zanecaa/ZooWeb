@@ -1,7 +1,10 @@
+using Isopoh.Cryptography.Argon2;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
+
 
 namespace ZooWeb.Pages.ZooUsers
 {
@@ -18,16 +21,15 @@ namespace ZooWeb.Pages.ZooUsers
 		{
 			//must add check for null later
 			info.Username = Request.Form["Username"];
-			info.Password = Request.Form["Password"];
-			info.AccountDisabled = Request.Form["AccountDisabled"];
-			info.EmployeeId = Request.Form["EmployeeId"];
+			info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
+			info.IsActive = Request.Form["Status"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				String acct_status = Request.Form["AccountDisabled"];
+				String acct_status = Request.Form["Status"];
 				if (acct_status != "disabled" && acct_status != "enabled")
 				{
 					errorMsg = "Account Status must be \"enabled\" or \"disabled\", not whatever \"" + acct_status + "\" is...";
@@ -46,15 +48,14 @@ namespace ZooWeb.Pages.ZooUsers
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO zoo_user (Username, Passwd, AccountDisabled, EmployeeId)" +
-						"VALUES (@Username, @Password, @AccountDisabled, @EmployeeId)";
+					string sql = "INSERT INTO zoo_user (Username, PasswordHash, IsActive)" +
+						"VALUES (@Username, @Password, @Status)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@Username", info.Username);
-						command.Parameters.AddWithValue("@Password", info.Password);
-						command.Parameters.AddWithValue("@AccountDisabled", (info.AccountDisabled == "disabled"));
-						command.Parameters.AddWithValue("@EmployeeId", info.EmployeeId);
+						command.Parameters.AddWithValue("@Password", info.PasswordHash);
+						command.Parameters.AddWithValue("@Status", (info.IsActive == "enabled"));
 
 						command.ExecuteNonQuery();
 					}
