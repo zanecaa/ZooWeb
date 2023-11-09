@@ -1,0 +1,79 @@
+﻿@page
+@model ZooWeb.Pages.Revenue.ReportModel
+@{
+}
+
+<br>
+<h2>Select Time Range</h2>
+<br>
+
+@if (Model.errorMsg.Length > 0)
+{
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		<strong>@Model.errorMsg</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+<form method="POST">
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Select Start Date</label>
+		<div class="col-sm-6">
+			<input class="datefield" data-val="true" data-val-required="Date is required" name="start" type="date" value=""/>
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Select End Date</label>
+		<div class="col-sm-6">
+			<input class="datefield" data-val="true" data-val-required="Date is required" name="end" type="date" value="" />
+		</div>
+	</div>
+
+	@if (Model.successMsg.Length > 0)
+	{
+		<div class="row mb-3">
+			<div class="col-sm-9">
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>@Model.successMsg</strong>
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+	}
+
+	<div class="row mb-3">
+		<div class="offset-sm-3 col-sm-3 d-grid">
+			<button type="submit" class="btn btn-primary">Generate Report</button>
+		</div>
+		<div class="col-sm-3 d-grid">
+			<a class="btn btn-outline-primary" href="/Revenue/Index" role="button">Cancel</a>
+		</div>
+	</div>
+
+	<br></br>
+
+	@if (Model.listRevenue.Count() > 0)
+	{
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Total</th>
+					<th>Source</th>
+					<th>Receipt Number</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.listRevenue)
+				{
+					<tr>
+						<td>@item.Total</td>
+						<td>@item.ReceiptSource</td>
+						<td>@item.ReceiptNum</td>
+						<td>@item.RevenueDate</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+</form>
