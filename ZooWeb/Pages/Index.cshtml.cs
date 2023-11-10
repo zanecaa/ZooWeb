@@ -51,10 +51,11 @@ namespace ZooWeb.Pages
         {
 			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			ZooUserInfo info = new ZooUserInfo();
+            Boolean accountStatus = false;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT UserID, Username, PasswordHash "
+				String sql = "SELECT UserID, Username, PasswordHash, IsActive "
 					+ "FROM zoo_user "
 					+ "WHERE Username = @Username";
 				using (SqlCommand command = new SqlCommand(sql, connection))
@@ -67,13 +68,19 @@ namespace ZooWeb.Pages
 							//info.UserId = reader.GetInt32(0).ToString();
 							info.Username = reader.GetString(1);
 							info.PasswordHash = reader.GetString(2);
+							accountStatus = (Boolean)reader["IsActive"];
+							if (accountStatus) { info.IsActive = "enabled"; }
+                            else { info.IsActive = "disabled"; }
 						}
 					}
 				}
 			}
-			//validate the user here.
+            //validate the user here.
             // TODO: validate against roles table when it is created
-			if (!String.IsNullOrEmpty(info.Username) && !String.IsNullOrEmpty(info.PasswordHash) && Argon2.Verify(info.PasswordHash, password))
+            if (!String.IsNullOrEmpty(info.Username)
+                && !String.IsNullOrEmpty(info.PasswordHash)
+                && accountStatus
+                && Argon2.Verify(info.PasswordHash, password))
             {
                 return true;
             }
