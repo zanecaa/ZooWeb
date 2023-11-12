@@ -18,6 +18,8 @@ namespace ZooWeb.Pages
         [BindProperty]
         public string Password { get; set; }
 
+        public string Role;
+
         public async Task<IActionResult> OnPostAsync()
         {
 			// Validate username and password
@@ -27,14 +29,14 @@ namespace ZooWeb.Pages
                 var claims = new List<Claim>
                 {
                     //new Claim(ClaimTypes.Name, "admin"),
-                    new Claim("user", "admin"),
+                    new Claim("user", Role),
                     // Add other claims as needed
                 };
 
-                var identity = new ClaimsIdentity(claims, "admin");
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync("admin", claimsPrincipal);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
                 // Redirect to the main page if login is successful
                 return RedirectToPage("/Home");
@@ -54,7 +56,7 @@ namespace ZooWeb.Pages
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT UserID, Username, PasswordHash "
+				String sql = "SELECT UserID, Username, PasswordHash, UserRole "
 					+ "FROM zoo_user "
 					+ "WHERE Username = @Username";
 				using (SqlCommand command = new SqlCommand(sql, connection))
@@ -67,7 +69,9 @@ namespace ZooWeb.Pages
 							//info.UserId = reader.GetInt32(0).ToString();
 							info.Username = reader.GetString(1);
 							info.PasswordHash = reader.GetString(2);
-						}
+                            Role = reader.GetString(3);
+                            System.Diagnostics.Debug.WriteLine(Role);
+                        }
 					}
 				}
 			}
