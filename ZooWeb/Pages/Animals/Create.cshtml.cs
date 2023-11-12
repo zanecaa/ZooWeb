@@ -22,7 +22,7 @@ namespace ZooWeb.Pages.Animals
 			info.Scientific_name = Request.Form["Scientific_name"];
 			info.Common_name = Request.Form["Common_name"];
 			info.Sex = Request.Form["Sex"];
-			info.Birth_date = Request.Form["Birth_date"];
+			info.Birth_date = DateTime.Parse(Request.Form["Birth_date"]);
 			info.Status = Request.Form["Status"];
 			info.Location_Id = Request.Form["Location_Id"];
 
@@ -74,7 +74,16 @@ namespace ZooWeb.Pages.Animals
 
 			foreach (FieldInfo field in fields)
 			{
-				field.SetValue(info, "");
+				if (field.FieldType == typeof(DateTime))
+				{
+					// For DateTime fields, set them to DateTime.MinValue to clear the value.
+					field.SetValue(info, DateTime.MinValue);
+				}
+				else
+				{
+					// For other fields (e.g., string fields), set them to an empty string.
+					field.SetValue(info, "");
+				}
 			}
 			successMsg = "New Animal Added";
 

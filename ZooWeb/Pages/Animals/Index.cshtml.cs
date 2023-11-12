@@ -36,7 +36,7 @@ namespace ZooWeb.Pages.Animals
                             info.Common_name = reader.GetString(3);
                             byte[] sexData = (byte[])reader["Sex"];
                             if (sexData[0] == 1) { info.Sex = "male"; } else { info.Sex = "female"; }
-                            info.Birth_date = reader.GetDateTime(5).ToString();
+                            info.Birth_date = reader.GetDateTime(5).Date;
                             info.Status = reader.GetString(6);
                             info.Location_Id = reader.GetInt64(7).ToString();
 
@@ -60,7 +60,7 @@ namespace ZooWeb.Pages.Animals
         public string Scientific_name;
         public string Common_name;
         public string Sex;
-        public string Birth_date;
+        public DateTime Birth_date;
         public string Status;
         public string Location_Id;
     }
