@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Isopoh.Cryptography.Argon2;
 using System.Data.SqlClient;
 using ZooWeb.Pages.ZooUsers;
+using System.Data;
 
 
 namespace ZooWeb.Pages
@@ -30,6 +31,7 @@ namespace ZooWeb.Pages
                 {
                     //new Claim(ClaimTypes.Name, "admin"),
                     new Claim("user", Role),
+                    new Claim(ClaimTypes.Role, Role),
                     // Add other claims as needed
                 };
 
@@ -70,7 +72,6 @@ namespace ZooWeb.Pages
 							info.Username = reader.GetString(1);
 							info.PasswordHash = reader.GetString(2);
                             Role = reader.GetString(3);
-                            System.Diagnostics.Debug.WriteLine(Role);
                         }
 					}
 				}

@@ -6,8 +6,8 @@ using System.Numerics;
 
 namespace ZooWeb.Pages.Enclosures
 {
-	[Authorize(Policy = "admin")]
-	public class IndexModel : PageModel
+    [Authorize(Roles = "admin, zookeeper")]
+    public class IndexModel : PageModel
     {
         public List<EnclosureInfo> listEnclosures = new List<EnclosureInfo>();
         public void OnGet()
