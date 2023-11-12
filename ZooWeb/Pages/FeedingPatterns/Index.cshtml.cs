@@ -6,8 +6,8 @@ using System.Numerics;
 
 namespace ZooWeb.Pages.FeedingPatterns
 {
-	[Authorize(Policy = "admin")]
-	public class IndexModel : PageModel
+    [Authorize(Roles = "admin, zookeeper")]
+    public class IndexModel : PageModel
     {
         public List<FeedingPatternInfo> listFeedingPatterns = new List<FeedingPatternInfo>();
         public void OnGet()

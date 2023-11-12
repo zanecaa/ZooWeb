@@ -5,16 +5,18 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAuthentication("admin").AddCookie("admin", options =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
-    options.Cookie.Name = "admin";
+    options.Cookie.Name = "access";
     //options.LoginPath = "/Index";
 });
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("admin", policy => policy.RequireClaim("user", "admin"));
+    options.AddPolicy("zookeeper", policy => policy.RequireClaim("user", "zookeeper"));
 });
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();

@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Isopoh.Cryptography.Argon2;
 using System.Data.SqlClient;
 using ZooWeb.Pages.ZooUsers;
+using System.Data;
 
 
 namespace ZooWeb.Pages
@@ -18,6 +19,8 @@ namespace ZooWeb.Pages
         [BindProperty]
         public string Password { get; set; }
 
+        public string Role;
+
         public async Task<IActionResult> OnPostAsync()
         {
 			// Validate username and password
@@ -27,14 +30,15 @@ namespace ZooWeb.Pages
                 var claims = new List<Claim>
                 {
                     //new Claim(ClaimTypes.Name, "admin"),
-                    new Claim("user", "admin"),
+                    new Claim("user", Role),
+                    new Claim(ClaimTypes.Role, Role),
                     // Add other claims as needed
                 };
 
-                var identity = new ClaimsIdentity(claims, "admin");
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync("admin", claimsPrincipal);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
                 // Redirect to the main page if login is successful
                 return RedirectToPage("/Home");
@@ -51,11 +55,10 @@ namespace ZooWeb.Pages
         {
 			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			ZooUserInfo info = new ZooUserInfo();
-            Boolean accountStatus = false;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT UserID, Username, PasswordHash, IsActive "
+				String sql = "SELECT UserID, Username, PasswordHash, UserRole "
 					+ "FROM zoo_user "
 					+ "WHERE Username = @Username";
 				using (SqlCommand command = new SqlCommand(sql, connection))
@@ -68,19 +71,14 @@ namespace ZooWeb.Pages
 							//info.UserId = reader.GetInt32(0).ToString();
 							info.Username = reader.GetString(1);
 							info.PasswordHash = reader.GetString(2);
-							accountStatus = (Boolean)reader["IsActive"];
-							if (accountStatus) { info.IsActive = "enabled"; }
-                            else { info.IsActive = "disabled"; }
-						}
+                            Role = reader.GetString(3);
+                        }
 					}
 				}
 			}
-            //validate the user here.
+			//validate the user here.
             // TODO: validate against roles table when it is created
-            if (!String.IsNullOrEmpty(info.Username)
-                && !String.IsNullOrEmpty(info.PasswordHash)
-                && accountStatus
-                && Argon2.Verify(info.PasswordHash, password))
+			if (!String.IsNullOrEmpty(info.Username) && !String.IsNullOrEmpty(info.PasswordHash) && Argon2.Verify(info.PasswordHash, password))
             {
                 return true;
             }

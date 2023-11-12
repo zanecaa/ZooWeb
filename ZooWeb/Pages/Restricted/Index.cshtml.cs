@@ -6,8 +6,8 @@ using System.Numerics;
 
 namespace ZooWeb.Pages.Restricted
 {
-	[Authorize(Policy = "admin")]
-	public class IndexModel : PageModel
+    [Authorize(Roles = "admin, zookeeper")]
+    public class IndexModel : PageModel
     {
         public List<RestrictedInfo> Restrictions = new List<RestrictedInfo>();
         public void OnGet()

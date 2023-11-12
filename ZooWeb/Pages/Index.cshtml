@@ -8,15 +8,34 @@
 </head>
 <body>
     @{
-        Layout = null;
+        //Layout = null;
     }
     <h1>Login</h1>
     <form method="post">
-        <label for="username">Username:</label>
-        <input asp-for="Username" required><br><br>
-        <label for="password">Password:</label>
-        <input asp-for="Password" type="password" required><br><br>
-        <input type="submit" value="Login">
+        </br>
+        <div class="row mb-1">
+            <label class="col-sm-1 col-form-label">Username</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" input asp-for="Username" required>
+            </div>
+        </div>
+
+        <div class="row mb-1">
+            <label class="col-sm-1 col-form-label">Password</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" type="password" input asp-for="Password" required>
+            </div>
+        </div>
+        </br>
+        <div class="row mb-2">
+            <div class="col-sm-3 col-form-label">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </div>
     </form>
+    </br>
+    <p>
+        <a href="/TicketFinder/Report">Continue as a Guest</a>
+    </p>
 </body>
 </html>
