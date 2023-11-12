@@ -19,9 +19,10 @@
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Phone Number</label>
         <div class="col-sm-6">
-            <input class="form-control" data-val="true" data-val-required="Phone number is required" name="Visitor.PhoneNumber" type="text" value="" />
+            <input class="form-control" type="tel" name="Visitor.PhoneNumber" placeholder="5551231234" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" maxlength="10" title="Ten digits code" required />
+            <label style="font-size:9px;padding-left:20px"> Eg: 5551231234</label>
         </div>
-    </div>
+    </div> 
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">First Name</label>
         <div class="col-sm-6">
@@ -52,7 +53,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
         <div class="col-sm-3 d-grid">
-            <a class="btn btn-outline-primary" href="/Revenue/Index" role="button">Cancel</a>
+            <a class="btn btn-outline-primary" href="/Index" role="button">Cancel</a>
         </div>
     </div>
 
