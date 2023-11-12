@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace ZooWeb.Pages.Visitors
+namespace ZooWeb.Pages.TicketFinder
 {
     public class ReportModel : PageModel
     {
