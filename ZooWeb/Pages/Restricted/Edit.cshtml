@@ -26,13 +26,13 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Close Date</label>
 		<div class="col-sm-6">
-			<input type="datetime-local" class="form-control" name="Close_date" value="@Model.info.Close_date">
+			<input type="datetime-local" class="form-control" name="Close_date" value="@Model.info.Close_date.ToString("yyyy-MM-ddTHH:mm")">
 		</div>
 	</div>
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Reopen Date</label>
 		<div class="col-sm-6">
-			<input type="datetime-local" class="form-control" name="Reopen_date" value="@Model.info.Reopen_date">
+			<input type="datetime-local" class="form-control" name="Reopen_date" value="@Model.info.Reopen_date.ToString("yyyy-MM-ddTHH:mm")">
 		</div>
 	</div>
 
