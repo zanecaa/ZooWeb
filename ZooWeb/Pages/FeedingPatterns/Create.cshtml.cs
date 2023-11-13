@@ -20,22 +20,25 @@ namespace ZooWeb.Pages.FeedingPatterns
 			info.Animal_ID = Request.Form["AnimalId"];
 			info.Meal = Request.Form["Meal"];
 			info.Portion = Request.Form["Portion"];
-			info.Schedule_days = Request.Form["ScheduleDays"];
-			info.Schedule_time = Request.Form["ScheduleTime"];
+            string[] selectedDays = Request.Form["ScheduleDays"];
+            string scheduleDays = string.Join(",", selectedDays);
+            info.Schedule_time = TimeSpan.Parse(Request.Form["ScheduleTime"]);
 
-			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
-			foreach (FieldInfo field in fields)
-			{
-				object fieldValue = field.GetValue(info);
-				if (fieldValue == "" || fieldValue == null)
-				{
-					errorMsg = "All fields are required";
-					return;
-				}
-			}
+            foreach (FieldInfo field in fields)
+            {
+                if (field.Name == "Schedule_days") continue; // Skip validation for ScheduleDays
 
-			try
+                object fieldValue = field.GetValue(info);
+                if (fieldValue == null || (fieldValue is string && string.IsNullOrWhiteSpace((string)fieldValue)))
+                {
+                    errorMsg = "All fields are required";
+                    return;
+                }
+            }
+
+            try
 			{
 				string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 				using (SqlConnection connection = new SqlConnection(connectionString))
@@ -48,7 +51,7 @@ namespace ZooWeb.Pages.FeedingPatterns
 						command.Parameters.AddWithValue("@AnimalId", int.Parse(info.Animal_ID));
 						command.Parameters.AddWithValue("@Meal", info.Meal);
 						command.Parameters.AddWithValue("@Portion", info.Portion);
-						command.Parameters.AddWithValue("@ScheduleDays", info.Schedule_days);
+						command.Parameters.AddWithValue("@ScheduleDays", scheduleDays);
 						command.Parameters.AddWithValue("@ScheduleTime", info.Schedule_time);
 
 						command.ExecuteNonQuery();
@@ -61,11 +64,22 @@ namespace ZooWeb.Pages.FeedingPatterns
 				return;
 			}
 
-			foreach (FieldInfo field in fields)
-			{
-				field.SetValue(info, "");
-			}
-			successMsg = "New FeedingPattern Added";
+            foreach (FieldInfo field in fields)
+            {
+                if (field.FieldType == typeof(List<string>))
+                {
+                    field.SetValue(info, new List<string>()); // Initialize a new empty list
+                }
+				else if (field.FieldType == typeof(TimeSpan))
+				{
+					field.SetValue(info, TimeSpan.Zero); // Set TimeSpan fields to TimeSpan.Zero
+				}
+				else
+                {
+                    field.SetValue(info, ""); // Set other fields to empty string
+                }
+            }
+            successMsg = "New FeedingPattern Added";
 
 			Response.Redirect("/FeedingPatterns/Index");
 		}

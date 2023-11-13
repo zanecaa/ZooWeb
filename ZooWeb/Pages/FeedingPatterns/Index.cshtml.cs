@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace ZooWeb.Pages.FeedingPatterns
 {
@@ -28,10 +29,10 @@ namespace ZooWeb.Pages.FeedingPatterns
                             info.Animal_ID = reader.GetInt32(0).ToString();
                             info.Meal = reader.GetString(1);
                             info.Portion = reader.GetDecimal(2).ToString();
-                            info.Schedule_days = reader.GetString(3);
-							info.Schedule_time = reader.GetTimeSpan(4).ToString();
+							info.Schedule_days = reader.GetString(3).Split(',').ToList();
+                            info.Schedule_time = reader.GetTimeSpan(4);
 
-							listFeedingPatterns.Add(info);
+                            listFeedingPatterns.Add(info);
                         }
                     }
                 }
@@ -44,7 +45,7 @@ namespace ZooWeb.Pages.FeedingPatterns
         public string Animal_ID;
         public string Meal;
         public string Portion;
-        public string Schedule_days;
-        public string Schedule_time;
+        public List<string> Schedule_days;
+        public TimeSpan Schedule_time;
     }
 }
