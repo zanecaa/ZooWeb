@@ -48,7 +48,7 @@ namespace ZooWeb.Pages.Revenue
 					{
 						sql = sql + " AND Eid=@Eid";
 					}
-					if (source != "")
+					if (source != "Any")
 					{
 						sql = sql + " AND ReceiptSource=@Src";
 					}
