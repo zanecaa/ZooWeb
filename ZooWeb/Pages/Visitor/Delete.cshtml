@@ -11,6 +11,7 @@
 			String sql = "DELETE FROM visitor WHERE PhoneNumber=@PhoneNumber";
 
 			using (SqlCommand command = new SqlCommand(sql, connection)){
+				System.Diagnostics.Debug.WriteLine(PhoneNumber);
 				command.Parameters.AddWithValue("@PhoneNumber", PhoneNumber);
 
 				command.ExecuteNonQuery();
