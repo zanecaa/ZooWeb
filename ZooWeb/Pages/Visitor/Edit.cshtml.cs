@@ -58,23 +58,23 @@ namespace ZooWeb.Pages.Visitor
 					return;
 				}
 			}
-
-			try
+         
+            try
 			{
 				string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "UPDATE visitor " +
-						"SET FirstName=@FirstName, LastName=@LastName, BirthDate=@BirthDate" +
-						"WHERE PhoneNumber=@PhoneNumber";
+                    string sql = "UPDATE visitor " +
+             "SET FirstName=@FirstName, LastName=@LastName, BirthDate=@BirthDate " +
+             "WHERE PhoneNumber=@PhoneNumber";
 
-					using (SqlCommand command = new SqlCommand(sql, connection))
+                    using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-                        command.Parameters.AddWithValue("@PhoneNumber", long.Parse(info.PhoneNumber));
-                        command.Parameters.AddWithValue("@FirstName", long.Parse(info.FirstName));
-                        command.Parameters.AddWithValue("@LastName", short.Parse(info.LastName));
-                        command.Parameters.AddWithValue("@BirthDate", long.Parse(info.BirthDate));
+                        command.Parameters.AddWithValue("@PhoneNumber", info.PhoneNumber);
+                        command.Parameters.AddWithValue("@FirstName", info.FirstName);
+                        command.Parameters.AddWithValue("@LastName", info.LastName);
+                        command.Parameters.AddWithValue("@BirthDate", info.BirthDate);
 
                         command.ExecuteNonQuery();
 					}
