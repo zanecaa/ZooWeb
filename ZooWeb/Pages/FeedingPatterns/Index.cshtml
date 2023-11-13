@@ -23,7 +23,7 @@
                 <td>@item.Animal_ID</td>
                 <td>@item.Meal</td>
                 <td>@item.Portion</td>
-                <td>@item.Schedule_days</td>
+                <td>@string.Join(", ", item.Schedule_days)</td>
                 <td>@item.Schedule_time</td>
                 <td>
                     <a class='btn btn-primary btn-sm' href="/FeedingPatterns/Edit?id=@item.Animal_ID">Edit</a>

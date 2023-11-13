@@ -28,6 +28,43 @@
 			<input class="datefield" data-val="true" data-val-required="Date is required" name="end" type="date" value="" />
 		</div>
 	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Select Source</label>
+		<div class="col-sm-6">
+			<select id="src" name="src">
+				<option value="Ticket Sales">Ticket</option>
+				<option value="Amenity Sales">Amenity</option>
+				<option value="Any">Any</option>
+			</select>
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Select Employee ID</label>
+		<div class="col-sm-6">
+			<input type="number" class="form-control" id="eid" name="eid" value="" pattern="\d*" title="Please enter a Employee ID">
+		</div>
+	</div>
+
+	<div class="row mb-3">
+		<script>
+			function assign() {
+				var checkbox = document.getElementById("checkbox");
+				var input = document.getElementById("eid");
+
+				if (checkbox.checked) {
+					input.value = null;
+					input.disabled = true;
+				}
+				else {
+					input.disabled = false;
+				}
+			}
+		</script>
+		<label class="col-sm-3 col-form-label">Select All Employees</label>
+		<div class="col-sm-6">
+			<input type="checkbox" id="checkbox" onchange="assign()">
+		</div>
+	</div>
 
 	@if (Model.successMsg.Length > 0)
 	{
@@ -61,6 +98,7 @@
 					<th>Source</th>
 					<th>Receipt Number</th>
 					<th>Date</th>
+					<th>Employee ID</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -71,6 +109,7 @@
 						<td>@item.ReceiptSource</td>
 						<td>@item.ReceiptNum</td>
 						<td>@item.RevenueDate</td>
+						<td>@item.Eid</td>
 					</tr>
 				}
 			</tbody>

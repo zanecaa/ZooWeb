@@ -6,8 +6,8 @@ using System.Numerics;
 
 namespace ZooWeb.Pages.Restricted
 {
-	[Authorize(Policy = "admin")]
-	public class IndexModel : PageModel
+    [Authorize(Roles = "admin, zookeeper")]
+    public class IndexModel : PageModel
     {
         public List<RestrictedInfo> Restrictions = new List<RestrictedInfo>();
         public void OnGet()
@@ -28,8 +28,8 @@ namespace ZooWeb.Pages.Restricted
                             { 
                                 RestrictedInfo info = new RestrictedInfo();
                                 info.Location_ID = reader.GetInt64(0).ToString();
-                                info.Close_date = reader.GetDateTime(1).ToString("yyyy-MM-dd HH:mm:ss");
-                                info.Reopen_date = reader.GetDateTime(2).ToString("yyyy-MM-dd HH:mm:ss");
+                                info.Close_date = reader.GetDateTime(1);
+                                info.Reopen_date = reader.GetDateTime(2);
 
                             Restrictions.Add(info);
                             }
@@ -42,8 +42,8 @@ namespace ZooWeb.Pages.Restricted
     public class RestrictedInfo
     {
         public string Location_ID;
-        public string Close_date;
-        public string Reopen_date;
+        public DateTime Close_date;
+        public DateTime Reopen_date;
     }
 }  
 //hello

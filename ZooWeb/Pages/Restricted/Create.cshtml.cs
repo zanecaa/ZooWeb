@@ -19,8 +19,8 @@ namespace ZooWeb.Pages.Restricted
 			//must add check for null later
 
 			info.Location_ID = Request.Form["Location_ID"];
-			info.Close_date = Request.Form["Close_date"];
-			info.Reopen_date = Request.Form["Reopen_date"];
+			info.Close_date = DateTime.Parse(Request.Form["Close_date"]);
+			info.Reopen_date = DateTime.Parse(Request.Form["Reopen_date"]);
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
@@ -46,18 +46,18 @@ namespace ZooWeb.Pages.Restricted
 						command.Parameters.AddWithValue("@Location_ID", info.Location_ID);
 
 						// Validate and format Close_date
-						if (DateTime.TryParse(info.Close_date, out DateTime closeDate))
+						if (!DateTime.TryParse(info.Close_date.ToString(), out DateTime closeDate))
 						{
-							command.Parameters.AddWithValue("@Close_date", closeDate);
+							errorMsg = "Invalid Close date format. Please use the format yyyy-MM-dd HH:mm:ss.";
 						}
 						else
 						{
-							errorMsg = "Invalid Close date format. Please use the format yyyy-MM-dd HH:mm:ss.";
-
+							command.Parameters.AddWithValue("@Close_date", closeDate);
 						}
 
+
 						// Validate and format Reopen_date
-						if (DateTime.TryParse(info.Reopen_date, out DateTime reopenDate))
+						if (DateTime.TryParse(info.Reopen_date.ToString(), out DateTime reopenDate))
 						{
 							command.Parameters.AddWithValue("@Reopen_date", reopenDate);
 						}

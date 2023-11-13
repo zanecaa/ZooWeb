@@ -12,6 +12,8 @@ namespace ZooWeb.Pages.Revenue
     {
         public string errorMsg = "";
 		public string successMsg = "";
+		public string source = "";
+		public string eid;
 
 		[DataType(DataType.Date)]
 		public DateTime startDate { get; set; }
@@ -27,6 +29,8 @@ namespace ZooWeb.Pages.Revenue
 			{
 				startDate = DateTime.Parse(Request.Form["start"]);
 				endDate = DateTime.Parse(Request.Form["end"]);
+				eid = Request.Form["eid"];
+				source = Request.Form["src"];
 
 				if (startDate > endDate)
 				{
@@ -40,12 +44,24 @@ namespace ZooWeb.Pages.Revenue
 					connection.Open();
 					string sql = "SELECT * FROM Revenue WHERE RevenueDate >= @StartDate AND RevenueDate <= @EndDate";
 
+					if (eid != null)
+					{
+						sql = sql + " AND Eid=@Eid";
+					}
+					if (source != "Any")
+					{
+						sql = sql + " AND ReceiptSource=@Src";
+					}
+
+
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@StartDate", startDate);
 						command.Parameters.AddWithValue("@EndDate", endDate);
+						if (source != "") command.Parameters.AddWithValue("@Src", source);
+						if (eid != null) command.Parameters.AddWithValue("@Eid", int.Parse(eid));
 
-							using (SqlDataReader reader = command.ExecuteReader())
+						using (SqlDataReader reader = command.ExecuteReader())
 							{
 								while (reader.Read())
 								{
@@ -54,6 +70,7 @@ namespace ZooWeb.Pages.Revenue
 									info.ReceiptSource = reader.GetString(1);
 									info.ReceiptNum = reader.GetInt64(2).ToString();
 									info.RevenueDate = reader.GetDateTime(3).ToString();
+									info.Eid = reader.GetInt32(4).ToString();
 
 									listRevenue.Add(info);
 								}

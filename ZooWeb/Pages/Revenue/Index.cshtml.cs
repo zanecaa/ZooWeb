@@ -53,5 +53,6 @@ namespace ZooWeb.Pages.Revenue
         public string ReceiptSource;
         public string ReceiptNum;
         public string RevenueDate;
-    }
+        public string Eid;
+	}
 }

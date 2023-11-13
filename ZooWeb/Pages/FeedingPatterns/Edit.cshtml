@@ -36,13 +36,21 @@
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Feeding Days</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="ScheduleDays" value="@Model.info.Schedule_days">
+            <div>
+                <input type="checkbox" name="ScheduleDays" value="Monday"> Monday
+                <input type="checkbox" name="ScheduleDays" value="Tuesday"> Tuesday
+                <input type="checkbox" name="ScheduleDays" value="Wednesday"> Wednesday
+                <input type="checkbox" name="ScheduleDays" value="Thursday"> Thursday
+                <input type="checkbox" name="ScheduleDays" value="Friday"> Friday
+                <input type="checkbox" name="ScheduleDays" value="Saturday"> Saturday
+                <input type="checkbox" name="ScheduleDays" value="Sunday"> Sunday
+            </div>
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Feeding Time</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="ScheduleTime" value="@Model.info.Schedule_time">
+            <input type="time" class="form-control" name="ScheduleTime" value="@Model.info.Schedule_time">
         </div>
     </div>
 
@@ -63,7 +71,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
         <div class="col-sm-3 d-grid">
-            <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+            <a class="btn btn-outline-primary" href="/FeedingPatterns" role="button">Cancel</a>
         </div>
     </div>
 </form>
