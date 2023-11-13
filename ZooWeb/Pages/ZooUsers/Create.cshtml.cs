@@ -22,20 +22,24 @@ namespace ZooWeb.Pages.ZooUsers
 			//must add check for null later
 			info.Username = Request.Form["Username"];
 			info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
-			info.IsActive = Request.Form["Status"];
+			//info.IsActive = Request.Form["Status"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				String acct_status = Request.Form["Status"];
+				/*String acct_status = Request.Form["Status"];
 				if (acct_status != "disabled" && acct_status != "enabled")
 				{
 					errorMsg = "Account Status must be \"enabled\" or \"disabled\", not whatever \"" + acct_status + "\" is...";
 					return;
-				}
-				if (field.Name != "UserId" && field.Name != "CreationDate" && (fieldValue == "" || fieldValue == null))
+				}*/
+				// we should have to check for status but it doesn't seem to work otherwise
+				if (field.Name != "UserId"
+					&& field.Name != "CreationDate" 
+					&& field.Name != "IsActive"
+					&& (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -55,7 +59,8 @@ namespace ZooWeb.Pages.ZooUsers
 					{
 						command.Parameters.AddWithValue("@Username", info.Username);
 						command.Parameters.AddWithValue("@Password", info.PasswordHash);
-						command.Parameters.AddWithValue("@Status", (info.IsActive == "enabled"));
+						//command.Parameters.AddWithValue("@Status", (info.IsActive == "enabled"));
+						command.Parameters.AddWithValue("@Status", true);
 
 						command.ExecuteNonQuery();
 					}
