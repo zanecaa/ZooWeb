@@ -58,7 +58,7 @@ namespace ZooWeb.Pages
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT UserID, Username, PasswordHash, UserRole "
+				String sql = "SELECT UserID, Username, PasswordHash, UserRole, IsActive "
 					+ "FROM zoo_user "
 					+ "WHERE Username = @Username";
 				using (SqlCommand command = new SqlCommand(sql, connection))
@@ -71,7 +71,17 @@ namespace ZooWeb.Pages
 							//info.UserId = reader.GetInt32(0).ToString();
 							info.Username = reader.GetString(1);
 							info.PasswordHash = reader.GetString(2);
-                            Role = reader.GetString(3);
+                            try
+                            {
+                                Role = reader.GetString(3);
+                            }
+                            catch (Exception ex)
+                            {
+                                return false;
+							}
+                            if (!reader.GetBoolean(4)) {
+                                return false;
+                            }
                         }
 					}
 				}
