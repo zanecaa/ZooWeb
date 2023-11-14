@@ -19,7 +19,7 @@ namespace ZooWeb.Pages.TicketSales
 			//must add check for null later
 			info.TicketID = Request.Form["TicketID"];
 			info.PassType = Request.Form["PassType"];
-			info.EmployeeID = Request.Form["EmployeeID"];
+			//info.EmployeeID = Request.Form["EmployeeID"];
 			info.VisitorPn = Request.Form["VisitorPn"];
 			info.Date = Request.Form["Date"];
 			info.Total = Request.Form["Total"];
@@ -49,8 +49,8 @@ namespace ZooWeb.Pages.TicketSales
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@TicketID", int.Parse(info.TicketID));
-						command.Parameters.AddWithValue("@PassType", long.Parse(info.PassType));
-						command.Parameters.AddWithValue("@EmployeeID", short.Parse(info.EmployeeID));
+						command.Parameters.AddWithValue("@PassType", info.PassType);
+						command.Parameters.AddWithValue("@EmployeeID", long.Parse(info.EmployeeID));
 						command.Parameters.AddWithValue("@VisitorPn", long.Parse(info.VisitorPn));
 						command.Parameters.AddWithValue("@Date", info.Date);
 						command.Parameters.AddWithValue("@Total", info.Total);
@@ -72,7 +72,7 @@ namespace ZooWeb.Pages.TicketSales
 			}
 			successMsg = "New Ticket Added";
 
-			Response.Redirect("/Ticket Sales/Index");
+			Response.Redirect("/TicketSales/Index");
 		}
     }
 }

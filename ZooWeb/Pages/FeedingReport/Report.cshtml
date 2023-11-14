@@ -1,0 +1,81 @@
+﻿@page
+@model ZooWeb.Pages.FeedingReport.ReportModel
+@{
+}
+
+<br>
+<h2>Specify Animal ID for Feeding Report</h2>
+<br>
+
+@if (Model.errorMsg.Length > 0)
+{
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		<strong>@Model.errorMsg</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+
+<form method="POST">
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Enter Animal ID</label>
+		<div class="col-sm-6">
+			<input type="number" class="form-control" id="aid" name="aid" value="" pattern="\d*" title="Please enter a Animal ID">
+		</div>
+	</div>
+
+	@if (Model.successMsg.Length > 0)
+	{
+		<div class="row mb-3">
+			<div class="col-sm-9">
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>@Model.successMsg</strong>
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+	}
+
+	<div class="row mb-3">
+		<div class="offset-sm-3 col-sm-3 d-grid">
+			<button type="submit" class="btn btn-primary">Generate Report</button>
+		</div>
+		<div class="col-sm-3 d-grid">
+			<a class="btn btn-outline-primary" href="/Index" role="button">Cancel</a>
+		</div>
+	</div>
+
+	<br></br>
+
+	@if (Model.animalInfo.Count() > 0)
+	{
+		<table class="table">
+			<thead>
+				<tr>
+					<th>AnimalId</th>
+					<th>Name</th>
+					<th>Meal</th>
+					<th>Portion</th>
+					<th>Days</th>
+					<th>Time</th>
+					<th>Status</th>
+					<th>Location</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.animalInfo)
+				{
+					<tr>
+						<td>@item.AnimalId</td>
+						<td>@item.Name</td>
+						<td>@item.Meal</td>
+						<td>@item.Portion</td>
+						<td>@item.Schedule_days</td>
+						<td>@item.Schedule_time</td>
+						<td>@item.Status</td>
+						<td>@item.Location</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+</form>
