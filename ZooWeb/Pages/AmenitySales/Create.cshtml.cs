@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Data.SqlClient;
 using System.Reflection;
 
@@ -22,14 +23,14 @@ namespace ZooWeb.Pages.AmenitySales
 			info.SaleType = Request.Form["SaleType"];
 			info.SaleDate = Request.Form["SaleDate"];
 			info.Total = Request.Form["Total"];
-			info.ReceiptNumber = Request.Form["ReceiptNumber"];
+			//info.ReceiptNumber = Request.Form["ReceiptNumber"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (fieldValue == "" || fieldValue == null)
+				if (field.Name != "ReceiptNumber" && (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -42,19 +43,45 @@ namespace ZooWeb.Pages.AmenitySales
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO amenitySales VALUES (@EID, @LocationID, @SaleType, @SaleDate, @Total, @ReceiptNumber)";
 
-					using (SqlCommand command = new SqlCommand(sql, connection))
+					string receipt_sql = "INSERT INTO receipt (Date, SaleTotal)" +
+						"	VALUES (@SaleDate, @Total)";
+					string get_receiptnum_sql = "SELECT ReceiptNumber FROM receipt WHERE Date=@SaleDate";
+					//string amenity_sql = "INSERT INTO amenitySales VALUES (@EID, @LocationID, @SaleType, @SaleDate, @Total, @ReceiptNumber)";
+					string amenity_sql = "INSERT INTO amenitySales (Eid, LocationID, SaleType, ReceiptNumber)" +
+						"	VALUES (@EID, @LocationID, @SaleType, @ReceiptNumber)";
+					
+					using (SqlCommand command = new SqlCommand(receipt_sql, connection))
+					{
+						command.Parameters.AddWithValue("@SaleDate", info.SaleDate);
+						command.Parameters.AddWithValue("@Total", info.Total);
+
+						command.ExecuteNonQuery();
+					}
+
+					using (SqlCommand command = new SqlCommand(get_receiptnum_sql, connection))
+					{
+						command.Parameters.AddWithValue("@SaleDate",info.SaleDate);
+						using (SqlDataReader reader = command.ExecuteReader())
+						{
+							if (reader.Read())
+							{
+								info.ReceiptNumber = reader.GetInt64(0).ToString();
+							}
+						}
+					}
+					
+					using (SqlCommand command = new SqlCommand(amenity_sql, connection))
 					{
 						command.Parameters.AddWithValue("@EID", int.Parse(info.EID));
 						command.Parameters.AddWithValue("@LocationID", int.Parse(info.LocationID));
 						command.Parameters.AddWithValue("@SaleType", info.SaleType);
-						command.Parameters.AddWithValue("@SaleDate", info.SaleDate);
-						command.Parameters.AddWithValue("@Total", info.Total);
 						command.Parameters.AddWithValue("@ReceiptNumber", int.Parse(info.ReceiptNumber));
 
 						command.ExecuteNonQuery();
 					}
+
+					
 				}
 			}
 			catch (Exception ex)

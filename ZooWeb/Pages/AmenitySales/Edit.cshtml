@@ -15,7 +15,6 @@
 }
 
 <form method="POST">
-	<input type="hidden" name="Location_ID" value="@Model.info.LocationID">
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Employee ID</label>
 		<div class="col-sm-6">
@@ -37,7 +36,7 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Sale Date</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="SaleDate" value="@Model.info.SaleDate">
+			<input type="text" class="form-control" name="SaleDate" value="@Model.info.SaleDate" disabled>
 		</div>
 	</div>
 	<div class="row mb-3">
@@ -49,7 +48,7 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Receipt Number</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="ReceiptNumber" value="@Model.info.ReceiptNumber">
+			<input type="text" class="form-control" name="ReceiptNumber" value="@Model.info.ReceiptNumber" disabled>
 		</div>
 	</div>
 
@@ -70,7 +69,7 @@
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
 		<div class="col-sm-3 d-grid">
-			<a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+			<a class="btn btn-outline-primary" href="/AmenitySales/Index" role="button">Cancel</a>
 		</div>
 	</div>
 </form>

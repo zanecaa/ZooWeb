@@ -14,17 +14,19 @@ namespace ZooWeb.Pages.AmenitySales
 		public string successMsg = "";
 		public void OnGet()
         {
-			String Location_ID = Request.Query["id"];
-			if (Location_ID == null || Location_ID == "") { errorMsg = "y tho?"; return; };
+			/*String Location_ID = Request.Query["id"];
+			if (Location_ID == null || Location_ID == "") { errorMsg = "y tho?"; return; };*/
 
 			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT * FROM amenitySales WHERE LocationID=@Location_ID";
+				String sql = "SELECT Eid, LocationId, SaleType, Date, SaleTotal, r.ReceiptNumber " +
+					"FROM amenitySales AS ams, receipt AS r " +
+					"WHERE ams.ReceiptNumber = r.ReceiptNumber";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
-					command.Parameters.AddWithValue("@Location_ID", Location_ID);
+					//command.Parameters.AddWithValue("@Location_ID", Location_ID);
 					using (SqlDataReader reader = command.ExecuteReader())
 					{
 						if (reader.Read())
@@ -45,18 +47,18 @@ namespace ZooWeb.Pages.AmenitySales
 
 
 			info.EID = Request.Form["EID"];
-			info.LocationID = Request.Form["Location_ID"];
+			info.LocationID = Request.Form["LocationID"];
 			info.SaleType = Request.Form["SaleType"];
-			info.SaleDate = Request.Form["SaleDate"];
+			//info.SaleDate = Request.Form["SaleDate"];
 			info.Total = Request.Form["Total"];
-			info.ReceiptNumber = Request.Form["ReceiptNumber"];
+			//info.ReceiptNumber = Request.Form["ReceiptNumber"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (fieldValue == "" || fieldValue == null)
+				if (field.Name != "SaleDate" && field.Name != "ReceiptNumber" && (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -69,17 +71,32 @@ namespace ZooWeb.Pages.AmenitySales
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "UPDATE AmenitySales " +
-						"SET EID=@EID, SaleType=@SaleType, SaleDate=@SaleDate, Total=@Total, ReceiptNumber=@ReceiptNumber " +
-						"WHERE LocationID=@LocationID";
-					using (SqlCommand command = new SqlCommand(sql, connection))
+
+					string amenity_sql = "UPDATE amenitySales " +
+						"SET Eid=@EID, SaleType=@SaleType, LocationID=@LocationID " +
+						"WHERE ReceiptNumber=@ReceiptNumber";
+
+					string receipt_sql = "UPDATE receipt " +
+						"SET SaleTotal=@Total " +
+						"WHERE ReceiptNumber=@ReceiptNumber";
+
+					//string get_receiptnum_sql = "SELECT ReceiptNumber FROM receipt WHERE Date=@SaleDate";
+
+					using (SqlCommand command = new SqlCommand(receipt_sql, connection))
 					{
-						command.Parameters.AddWithValue("@Eid", int.Parse(info.EID));
-						command.Parameters.AddWithValue("@LocationID", int.Parse(info.LocationID));
+						command.Parameters.AddWithValue("@Total", info.Total);
+						command.Parameters.AddWithValue("@ReceiptNumber", info.ReceiptNumber);
+
+						command.ExecuteNonQuery();
+					}
+
+
+					using (SqlCommand command = new SqlCommand(amenity_sql, connection))
+					{
+						command.Parameters.AddWithValue("@Eid", info.EID);
+						command.Parameters.AddWithValue("@LocationID", info.LocationID);
 						command.Parameters.AddWithValue("@SaleType", info.SaleType);
-						command.Parameters.AddWithValue("@SaleDate", info.SaleDate);
-						command.Parameters.AddWithValue("@Total", decimal.Parse(info.Total));
-						command.Parameters.AddWithValue("@ReceiptNumber", int.Parse(info.ReceiptNumber));
+						command.Parameters.AddWithValue("@ReceiptNumber", info.ReceiptNumber);
 
 						command.ExecuteNonQuery();
 					}
