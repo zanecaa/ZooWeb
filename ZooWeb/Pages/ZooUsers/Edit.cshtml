@@ -4,7 +4,7 @@
 }
 
 <br>
-<h2>Edit Animal</h2>
+<h2>Edit User</h2>
 <br>
 
 @if (Model.errorMsg.Length > 0)
@@ -36,7 +36,10 @@
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Account Status</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="Status" value="@Model.info.IsActive">
+            <select id="src" name="Status" value="@Model.info.IsActive">
+                <option value="enabled">Enabled</option>
+                <option value="disabled">Disabled</option>
+            </select>
         </div>
     </div>
     <div class="row mb-3">
@@ -63,7 +66,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
         <div class="col-sm-3 d-grid">
-            <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+            <a class="btn btn-outline-primary" href="/ZooUsers/Index" role="button">Cancel</a>
         </div>
     </div>
 </form>

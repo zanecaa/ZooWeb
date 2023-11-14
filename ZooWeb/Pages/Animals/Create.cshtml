@@ -43,7 +43,10 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Sex</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Sex" value="@Model.info.Sex">
+			<select id="src" name="Sex" value="@Model.info.Sex">
+				<option value="male">Male</option>
+				<option value="female">Female</option>
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
@@ -55,7 +58,11 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Status</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Status" value="@Model.info.Status">
+			<select id="src" name="Status" value="@Model.info.Status">
+				<option value="Healthy">Healthy</option>
+				<option value="Sick">Sick</option>
+				<option value="Dead">Dead</option>
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">

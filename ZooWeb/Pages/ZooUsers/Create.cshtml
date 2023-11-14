@@ -28,12 +28,14 @@
 			<input type="password" class="form-control" name="Password" value="@Model.info.PasswordHash">
 		</div>
 	</div>
+	<!--
 	<div class="row mb-3">
         <label class="col-sm-3 col-form-label">Account Status</label>
 		<div class="col-sm-6">
 			<input type="text" class="form-control" name="Status" value="@Model.info.IsActive">
 		</div>
 	</div>
+	-->
 
 	@if (Model.successMsg.Length > 0)
 	{
@@ -52,7 +54,7 @@
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
 		<div class="col-sm-3 d-grid">
-			<a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+			<a class="btn btn-outline-primary" href="/ZooUsers/Index" role="button">Cancel</a>
 		</div>
 	</div>
 </form>
