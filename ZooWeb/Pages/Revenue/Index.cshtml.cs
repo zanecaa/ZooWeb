@@ -1,9 +1,14 @@
+using Humanizer.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Numerics;
+using ZooWeb.Controllers;
 
 namespace ZooWeb.Pages.Revenue
 {
@@ -11,14 +16,15 @@ namespace ZooWeb.Pages.Revenue
     public class IndexModel : PageModel
     {
         public List<revenueInfo> listRevenue = new List<revenueInfo>();
-        public void OnGet()
-        {
+        protected readonly IConfiguration Config; public IndexModel(IConfiguration configuration){Config = configuration;}
 
-            //try
-            //
-                string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+		public void OnGet()
+		{
+			string connectionString = Config.GetConnectionString("connectionstring");
 
-                using (SqlConnection connection = new SqlConnection(connectionString)) 
+			try
+			{
+			using (SqlConnection connection = new SqlConnection(connectionString)) 
                 { 
                     connection.Open();
                     String sql = "SELECT * FROM Revenue";
@@ -39,11 +45,11 @@ namespace ZooWeb.Pages.Revenue
                         }
                     }
                 }
-            //}
-            //catch(Exception ex)
-            //{
-               // Console.WriteLine("Exception: " + ex.ToString());
-            //}
+            }
+            catch(Exception ex)
+            {
+               Console.WriteLine("Exception: " + ex.ToString());
+            }
         }
     }
 
