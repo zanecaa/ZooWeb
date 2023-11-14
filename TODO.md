@@ -8,5 +8,6 @@
 - [ ] add meaningful errors to logins (nonexistent account, disabled account)
 - [ ] figure out how to get the database to send emails and HTTP requests (if anyone mentions `sp_<whatever>` without also demonstrating this functionality on Azure Cloud...)
 - [ ] replace current user account system with external system (e.g. AD, LDAP, authelia, etc.)
+- [ ] actually auto-generate IDs
 - [ ] ensure general consistency
 - [ ] put project on portfolio and buy a house before single bedroom homes reach 500k
