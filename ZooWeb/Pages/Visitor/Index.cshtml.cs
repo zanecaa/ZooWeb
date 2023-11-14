@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
-using Microsoft.AspNetCore.Authorization;
-
+using System.Numerics;
 namespace ZooWeb.Pages.Visitor
 {
-	[Authorize(Policy = "admin")]
+	[Authorize(Roles = "admin, zookeeper")]
 	public class IndexModel : PageModel
 	{
 		public List<VisitorInfo> ListVisitors = new List<VisitorInfo>();
