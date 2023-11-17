@@ -83,7 +83,7 @@ namespace ZooWeb.Pages.AmenitySales
 					//string get_receiptnum_sql = "SELECT ReceiptNumber FROM receipt WHERE Date=@SaleDate";
 
 					using (SqlCommand command = new SqlCommand(receipt_sql, connection))
-					{
+					{ 
 						command.Parameters.AddWithValue("@Total", info.Total);
 						command.Parameters.AddWithValue("@ReceiptNumber", info.ReceiptNumber);
 
