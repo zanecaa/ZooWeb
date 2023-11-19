@@ -18,7 +18,7 @@ namespace ZooWeb.Pages.Employees
         {
 			//must add check for null later
 
-			info.EmployeeId = Request.Form["Eid"];
+			info.EmployeeId = "0";
 			info.Phone_num = Request.Form["Phone_num"];
 			info.Dno = Request.Form["Dno"];
 			info.Super_Eid = Request.Form["Super_Eid"];
@@ -41,6 +41,24 @@ namespace ZooWeb.Pages.Employees
 
 			try
 			{
+				string connectionStringID = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+
+				using (SqlConnection connection = new SqlConnection(connectionStringID))
+				{
+					connection.Open();
+					String sql = "SELECT TOP 1 * FROM employee ORDER BY EmployeeId DESC;";
+					using (SqlCommand command = new SqlCommand(sql, connection))
+					{
+						using (SqlDataReader reader = command.ExecuteReader())
+						{
+							while (reader.Read())
+							{
+								info.EmployeeId = (reader.GetInt32(0) + 1).ToString();
+							}
+						}
+					}
+				}
+
 				string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
