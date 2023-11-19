@@ -1,0 +1,14 @@
+﻿@page
+@model ZooWeb.Pages.LogoutModel
+@{
+}
+
+<form id="logoutForm" method="post" asp-page-handler="Logout">
+    <button type="submit" style="display: none;"></button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("logoutForm").submit();
+    });
+</script>

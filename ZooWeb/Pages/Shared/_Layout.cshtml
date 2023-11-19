@@ -21,7 +21,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-space-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Login</a>
@@ -64,6 +64,20 @@
                                 </div>
                             </li>
                         }
+
+                        <div class="d-flex ms-auto order-5">
+                            <form method="post" asp-page-handler="Logout" onsubmit="return handleLogout();">
+                                <button class="btn btn-outline-info" type="submit" id="btnLogout">Logout</button>
+                            </form>
+                        </div>
+
+                        <script>
+                            function handleLogout() {
+                                window.location.href = '/Logout';
+
+                                return false;
+                            }
+                        </script>
                     </ul>
                 </div>
             </div>
