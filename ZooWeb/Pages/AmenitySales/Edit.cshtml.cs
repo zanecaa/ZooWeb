@@ -4,6 +4,7 @@ using ZooWeb.Pages.AmenitySales;
 using System.Data.SqlClient;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
+using System.Linq;
 
 namespace ZooWeb.Pages.AmenitySales
 {
@@ -16,17 +17,18 @@ namespace ZooWeb.Pages.AmenitySales
         {
 			/*String Location_ID = Request.Query["id"];
 			if (Location_ID == null || Location_ID == "") { errorMsg = "y tho?"; return; };*/
+			String SaleId = Request.Query["id"];
 
 			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				String sql = "SELECT Eid, LocationId, SaleType, Date, SaleTotal, r.ReceiptNumber " +
-					"FROM amenitySales AS ams, receipt AS r " +
-					"WHERE ams.ReceiptNumber = r.ReceiptNumber";
+				String sql = "SELECT * " +
+					"FROM amenitySales " +
+					"WHERE SaleId=@SaleId";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
-					//command.Parameters.AddWithValue("@Location_ID", Location_ID);
+					command.Parameters.AddWithValue("@SaleId", SaleId);
 					using (SqlDataReader reader = command.ExecuteReader())
 					{
 						if (reader.Read())
@@ -34,9 +36,9 @@ namespace ZooWeb.Pages.AmenitySales
 							info.EID = reader.GetInt32(0).ToString();
 							info.LocationID = reader.GetInt32(1).ToString();
 							info.SaleType = reader.GetString(2);
-							info.SaleDate = reader.GetDateTime(3).ToString("yyyy-MM-dd");
-							info.Total = reader.GetDecimal(4).ToString();
-							info.ReceiptNumber = reader.GetInt64(5).ToString();
+							info.SaleDate = reader.GetDateTime(5).ToString("yyyy-MM-dd");
+							info.SaleTotal = reader.GetDecimal(4).ToString();
+							info.SaleId = reader.GetInt64(3).ToString();
 						}
 					}
 				}
@@ -50,15 +52,15 @@ namespace ZooWeb.Pages.AmenitySales
 			info.LocationID = Request.Form["LocationID"];
 			info.SaleType = Request.Form["SaleType"];
 			//info.SaleDate = Request.Form["SaleDate"];
-			info.Total = Request.Form["Total"];
-			//info.ReceiptNumber = Request.Form["ReceiptNumber"];
+			info.SaleTotal = Request.Form["Total"];
+			info.SaleId = Request.Form["SaleId"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
-
+			string[] excludedNames = { "SaleDate", "SaleId" };
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (field.Name != "SaleDate" && field.Name != "ReceiptNumber" && (fieldValue == "" || fieldValue == null))
+				if (!excludedNames.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -72,31 +74,16 @@ namespace ZooWeb.Pages.AmenitySales
 				{
 					connection.Open();
 
-					string amenity_sql = "UPDATE amenitySales " +
+					string sql = "UPDATE amenitySales " +
 						"SET Eid=@EID, SaleType=@SaleType, LocationID=@LocationID " +
-						"WHERE ReceiptNumber=@ReceiptNumber";
+						"WHERE SaleId=@SaleId";
 
-					string receipt_sql = "UPDATE receipt " +
-						"SET SaleTotal=@Total " +
-						"WHERE ReceiptNumber=@ReceiptNumber";
-
-					//string get_receiptnum_sql = "SELECT ReceiptNumber FROM receipt WHERE Date=@SaleDate";
-
-					using (SqlCommand command = new SqlCommand(receipt_sql, connection))
-					{ 
-						command.Parameters.AddWithValue("@Total", info.Total);
-						command.Parameters.AddWithValue("@ReceiptNumber", info.ReceiptNumber);
-
-						command.ExecuteNonQuery();
-					}
-
-
-					using (SqlCommand command = new SqlCommand(amenity_sql, connection))
+					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@Eid", info.EID);
 						command.Parameters.AddWithValue("@LocationID", info.LocationID);
 						command.Parameters.AddWithValue("@SaleType", info.SaleType);
-						command.Parameters.AddWithValue("@ReceiptNumber", info.ReceiptNumber);
+						command.Parameters.AddWithValue("@SaleId", info.SaleId);
 
 						command.ExecuteNonQuery();
 					}
