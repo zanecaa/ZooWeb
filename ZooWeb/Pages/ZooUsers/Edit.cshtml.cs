@@ -78,12 +78,20 @@ namespace ZooWeb.Pages.ZooUsers
 					string sql = "UPDATE zoo_user " +
 						"SET Username=@Username, PasswordHash=@Password, IsActive=@Status " +
 						"WHERE UserId=@UserId";
+                    if (String.IsNullOrEmpty(info.PasswordHash)) {
+                        sql = "UPDATE zoo_user " +
+                        "SET Username=@Username IsActive=@Status " +
+                        "WHERE UserId=@UserId";
+                    }
 
-					using (SqlCommand command = new SqlCommand(sql, connection))
+                    using (SqlCommand command = new SqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@UserId", info.UserId);
 						command.Parameters.AddWithValue("@Username",info.Username);
-						command.Parameters.AddWithValue("@Password", info.PasswordHash);
+						if (!String.IsNullOrEmpty(info.PasswordHash))
+						{
+							command.Parameters.AddWithValue("@Password", info.PasswordHash);
+						}
 						command.Parameters.AddWithValue("@Status", (info.IsActive == "enabled"));
 						//command.Parameters.AddWithValue("@CreationDate", info.CreationDate);
 

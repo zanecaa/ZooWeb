@@ -20,7 +20,9 @@ namespace ZooWeb.Pages.AmenitySales
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                String sql = "SELECT * FROM amenitySales";
+                String sql = "SELECT Eid, LocationId, SaleType, Date, SaleTotal, r.ReceiptNumber " +
+                    "FROM amenitySales AS ams, receipt AS r " +
+                    "WHERE ams.ReceiptNumber = r.ReceiptNumber";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
