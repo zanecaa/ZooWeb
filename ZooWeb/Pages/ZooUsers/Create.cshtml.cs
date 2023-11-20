@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Linq;
 
 
 namespace ZooWeb.Pages.ZooUsers
@@ -51,9 +52,11 @@ namespace ZooWeb.Pages.ZooUsers
 			//must add check for null later
 			info.Username = Request.Form["Username"];
 			info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
+			info.UserRole = Request.Form["Role"];
 			//info.IsActive = Request.Form["Status"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedFields = { "UserId", "CreationDate", "IsActive" };
 
 			foreach (FieldInfo field in fields)
 			{
@@ -65,12 +68,10 @@ namespace ZooWeb.Pages.ZooUsers
 					return;
 				}*/
 				// we should have to check for status but it doesn't seem to work otherwise
-				if (field.Name != "UserId"
-					&& field.Name != "CreationDate" 
-					&& field.Name != "IsActive"
+				if (!excludedFields.Contains(field.Name)
 					&& (fieldValue == "" || fieldValue == null))
 				{
-					errorMsg = "All fields are required";
+					errorMsg = "Missing required field: " + field.Name;
 					return;
 				}
 			}
@@ -81,8 +82,8 @@ namespace ZooWeb.Pages.ZooUsers
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO zoo_user (Username, PasswordHash, IsActive)" +
-						"VALUES (@Username, @Password, @Status)";
+					string sql = "INSERT INTO zoo_user (Username, PasswordHash, IsActive, UserRole)" +
+						"VALUES (@Username, @Password, @Status, @UserRole)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
@@ -90,6 +91,7 @@ namespace ZooWeb.Pages.ZooUsers
 						command.Parameters.AddWithValue("@Password", info.PasswordHash);
 						//command.Parameters.AddWithValue("@Status", (info.IsActive == "enabled"));
 						command.Parameters.AddWithValue("@Status", true);
+						command.Parameters.AddWithValue("@UserRole", info.UserRole);
 
 						command.ExecuteNonQuery();
 					}
