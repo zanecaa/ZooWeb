@@ -47,6 +47,7 @@ namespace ZooWeb.Pages.ZooUsers
         public string Username;
         public string PasswordHash;
         public string IsActive;
-        public string CreationDate;   
+        public string CreationDate;
+        public string UserRole;
     }
 }

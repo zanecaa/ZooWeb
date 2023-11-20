@@ -28,6 +28,12 @@
 			<input type="password" class="form-control" name="Password" value="@Model.info.PasswordHash">
 		</div>
 	</div>
+	<div class="row mb-3">
+		<label class="col-sm-3 col-form-label">Role</label>
+		<div class="col-sm-6">
+			@Html.DropDownListFor(m => m.userRoleList, new SelectList(Model.userRoleList, "Key", "Display"), "-")
+		</div>
+	</div>
 	<!--
 	<div class="row mb-3">
         <label class="col-sm-3 col-form-label">Account Status</label>

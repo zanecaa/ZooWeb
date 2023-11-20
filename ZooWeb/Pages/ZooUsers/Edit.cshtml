@@ -34,11 +34,39 @@
         </div>
     </div>
     <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Role</label>
+        <div class="col-sm-6">
+            <select name="Role" value="@Model.info.UserRole">
+                <option value="">-</option>
+                @foreach (RoleListTable item in Model.userRoleList)
+                {
+                    if (item.Key == Model.info.UserRole)
+                    {
+                        <option value="@(item.Key)" selected="selected">@item.Display</option>
+                    }
+                    else
+                    {
+                        <option value="@(item.Key)">@item.Display</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Account Status</label>
         <div class="col-sm-6">
-            <select id="src" name="Status" value="@Model.info.IsActive">
-                <option value="enabled">Enabled</option>
-                <option value="disabled">Disabled</option>
+            <select name="Status" value="@Model.info.IsActive">
+                @foreach (string item in new List<string>{ "enabled", "disabled" })
+                    {
+                    if (item == Model.info.IsActive)
+                    {
+                        <option value="@(item)" selected="selected">@item</option>
+                    }
+                    else
+                    {
+                        <option value="@(item)">@item</option>
+                    }
+                }
             </select>
         </div>
     </div>

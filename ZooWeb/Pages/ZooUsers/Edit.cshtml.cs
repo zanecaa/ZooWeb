@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
 using Isopoh.Cryptography.Argon2;
+using System.Data.SqlTypes;
+using System.Linq;
 
 namespace ZooWeb.Pages.ZooUsers
 {
 	public class EditModel : PageModel
 	{
-		public ZooUserInfo info = new ZooUserInfo();
+        public List<RoleListTable> userRoleList = new List<RoleListTable>();
+        public ZooUserInfo info = new ZooUserInfo();
 		public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
@@ -37,10 +40,36 @@ namespace ZooWeb.Pages.ZooUsers
 							if (accountStatusData) { info.IsActive = "enabled"; }
 							else { info.IsActive = "disabled";  }							
 							info.CreationDate = reader.GetDateTime(4).ToString();
+							try
+							{
+								info.UserRole = reader.GetString(5);
+							}
+							catch (SqlNullValueException)
+							{
+                                info.UserRole = "-";
+                            }
 						}
 					}
 				}
-			}
+
+                sql = "SELECT RoleName "
+                    + "FROM zoo_user_role";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string roleName = reader.GetString(0);
+                            userRoleList.Add(new RoleListTable
+                            {
+                                Key = roleName,
+                                Display = roleName
+                            });
+                        }
+                    }
+                }
+            }
 		}
 		public void OnPost()
 		{
@@ -50,21 +79,18 @@ namespace ZooWeb.Pages.ZooUsers
 			info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
 			info.IsActive = Request.Form["Status"];
 			info.CreationDate = Request.Form["CreationDate"];
+			info.UserRole = Request.Form["Role"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedFields = { "UserId", "CreationDate" };
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				String acct_status = Request.Form["Status"];
-				if (acct_status != "disabled" && acct_status != "enabled")
+				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
-					errorMsg = "Account Status must be \"enabled\" or \"disabled\", not whatever \"" + acct_status + "\" is...";
-					return;
-				}
-				if (field.Name != "UserId" && field.Name != "CreationDate" && (fieldValue == "" || fieldValue == null))
-				{
-					errorMsg = "All fields are required";
+					//errorMsg = "All fields are required";
+					errorMsg = "Missing field: " + field.Name;
 					return;
 				}
 			}
@@ -76,13 +102,15 @@ namespace ZooWeb.Pages.ZooUsers
 				{
 					connection.Open();
 					string sql = "UPDATE zoo_user " +
-						"SET Username=@Username, PasswordHash=@Password, IsActive=@Status " +
-						"WHERE UserId=@UserId";
-                    if (String.IsNullOrEmpty(info.PasswordHash)) {
-                        sql = "UPDATE zoo_user " +
-                        "SET Username=@Username IsActive=@Status " +
-                        "WHERE UserId=@UserId";
+                        "SET Username=@Username, IsActive=@Status ";
+                    if (!String.IsNullOrEmpty(info.PasswordHash)) {
+                        sql +=  ", PasswordHash=@Password ";
                     }
+					if (!String.IsNullOrEmpty(info.UserRole))
+					{
+						sql += ", UserRole=@UserRole ";
+					}
+                    sql += "WHERE UserId=@UserId";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
 					{
@@ -92,7 +120,11 @@ namespace ZooWeb.Pages.ZooUsers
 						{
 							command.Parameters.AddWithValue("@Password", info.PasswordHash);
 						}
-						command.Parameters.AddWithValue("@Status", (info.IsActive == "enabled"));
+                        if (!String.IsNullOrEmpty(info.UserRole))
+						{
+							command.Parameters.AddWithValue("@UserRole", info.UserRole);
+						}
+                        command.Parameters.AddWithValue("@Status", (info.IsActive == "enabled"));
 						//command.Parameters.AddWithValue("@CreationDate", info.CreationDate);
 
 						command.ExecuteNonQuery();

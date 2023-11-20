@@ -2,6 +2,8 @@ using Isopoh.Cryptography.Argon2;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
 
@@ -10,11 +12,38 @@ namespace ZooWeb.Pages.ZooUsers
 {
 	public class CreateModel : PageModel
 	{
+		//public SelectList DropDownList { get; set; }
+
 		public ZooUserInfo info = new ZooUserInfo();
+		public List<RoleListTable> userRoleList = new List<RoleListTable>();
 		public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
 		{
+			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				String sql = "SELECT RoleName "
+					+ "FROM zoo_user_role";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while(reader.Read())
+						{
+							string roleName = reader.GetString(0);
+							userRoleList.Add(new RoleListTable
+							{
+								Key = roleName,
+								Display = roleName
+							});
+						}
+					}
+				}
+			}
+			//DropDownList = new SelectList(userRoleList, "Key", "Display");
 		}
 
 		public void OnPost()
@@ -80,5 +109,10 @@ namespace ZooWeb.Pages.ZooUsers
 
 			Response.Redirect("/ZooUsers/Index");
 		}
+	}
+	public class RoleListTable
+	{
+		public string Key { get; set; }
+		public string Display { get; set; }
 	}
 }
