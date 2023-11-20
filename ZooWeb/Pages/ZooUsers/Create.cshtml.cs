@@ -51,7 +51,10 @@ namespace ZooWeb.Pages.ZooUsers
 		{
 			//must add check for null later
 			info.Username = Request.Form["Username"];
-			info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
+			if (!String.IsNullOrEmpty(Request.Form["Password"]))
+			{
+				info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
+			}
 			info.UserRole = Request.Form["Role"];
 			//info.IsActive = Request.Form["Status"];
 
@@ -71,7 +74,9 @@ namespace ZooWeb.Pages.ZooUsers
 				if (!excludedFields.Contains(field.Name)
 					&& (fieldValue == "" || fieldValue == null))
 				{
-					errorMsg = "Missing required field: " + field.Name;
+					string fieldName = field.Name;
+					if (fieldName == "PasswordHash") { fieldName = "Password"; }
+					errorMsg = "Missing required field: " + fieldName;
 					return;
 				}
 			}

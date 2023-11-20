@@ -76,13 +76,16 @@ namespace ZooWeb.Pages.ZooUsers
 			//must add check for null later
 			info.UserId = Request.Form["UserId"];
 			info.Username = Request.Form["Username"];
-			info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
+			if (!String.IsNullOrEmpty(Request.Form["Password"]))
+			{
+				info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
+			}
 			info.IsActive = Request.Form["Status"];
 			info.CreationDate = Request.Form["CreationDate"];
 			info.UserRole = Request.Form["Role"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
-			string[] excludedFields = { "UserId", "CreationDate" };
+			string[] excludedFields = { "UserId", "CreationDate", "PasswordHash" };
 
 			foreach (FieldInfo field in fields)
 			{
