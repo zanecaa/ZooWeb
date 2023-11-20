@@ -14,6 +14,7 @@ namespace ZooWeb.Pages.Revenue
 		public string successMsg = "";
 		public string source = "";
 		public string eid;
+		public decimal RevenueTotal = 0;
 
 		[DataType(DataType.Date)]
 		public DateTime startDate { get; set; }
@@ -68,9 +69,11 @@ namespace ZooWeb.Pages.Revenue
 									revenueInfo info = new revenueInfo();
 									info.Total = reader.GetDecimal(0).ToString();
 									info.ReceiptSource = reader.GetString(1);
-									info.ReceiptNum = reader.GetInt64(2).ToString();
+									info.ReceiptNum = reader.GetString(2);
 									info.RevenueDate = reader.GetDateTime(3).ToString();
 									info.Eid = reader.GetInt32(4).ToString();
+
+									RevenueTotal = RevenueTotal + reader.GetDecimal(0);
 
 									listRevenue.Add(info);
 								}
