@@ -33,24 +33,28 @@
 			<input type="text" class="form-control" name="SaleType" value="@Model.info.SaleType">
 		</div>
 	</div>
+	<!--
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Sale Date</label>
 		<div class="col-sm-6">
 			<input type="text" class="form-control" name="SaleDate" value="@Model.info.SaleDate">
 		</div>
 	</div>
+	-->
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Total</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Total" value="@Model.info.Total">
+			<input type="text" class="form-control" name="Total" value="@Model.info.SaleTotal">
 		</div>
 	</div>
+	<!--
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Receipt Number</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="ReceiptNumber" value="@Model.info.ReceiptNumber">
+			<input type="text" class="form-control" name="ReceiptNumber" value="@Model.info.SaleId">
+		</div>
 	</div>
-	</div>
+	-->
 
 	@if (Model.successMsg.Length > 0)
 	{

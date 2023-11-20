@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Linq;
 
 namespace ZooWeb.Pages.TicketSales
 {
@@ -32,7 +33,8 @@ namespace ZooWeb.Pages.TicketSales
 							info.PassType = reader.GetString(1);
 							info.EmployeeID = reader.GetInt32(2).ToString();
 							info.VisitorPn = reader.GetInt64(3).ToString();
-							info.ReceiptNumber = reader.GetInt64(4).ToString();
+							info.SaleTotal = reader.GetSqlMoney(4).ToString();
+							info.SaleDate = reader.GetDateTime(4).ToString();
 
 						}
 					}
@@ -46,14 +48,16 @@ namespace ZooWeb.Pages.TicketSales
 			info.PassType = Request.Form["PassType"];
 			info.EmployeeID = Request.Form["EmployeeID"];
 			info.VisitorPn = Request.Form["VisitorPn"];
-			info.ReceiptNumber = Request.Form["ReceiptNumber"];
+			info.SaleTotal = Request.Form["Total"];
+			//info.SaleDate = Request.Form["ReceiptNumber"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedFields = { "TicketID", "SaleDate" };
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if ((fieldValue == "" || fieldValue == null))
+				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					System.Diagnostics.Debug.WriteLine(field);
@@ -68,16 +72,17 @@ namespace ZooWeb.Pages.TicketSales
 				{
 					connection.Open();
 					string sql = "UPDATE ticket_sales " +
-						"SET PassType=@PassType, EmployeeId=@EmployeeID, VisitorPn=@VisitorPn, ReceiptNumber=@ReceiptNumber" +
-						" WHERE TicketId=@TicketID";
+						"SET PassType=@PassType, EmployeeId=@EmployeeId, VisitorPn=@VisitorPn, Sale_total=@SaleTotal" +
+						" WHERE TicketId=@TicketId";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@TicketId", int.Parse(info.TicketID));
+						command.Parameters.AddWithValue("@TicketId", info.TicketID);
 						command.Parameters.AddWithValue("@PassType", info.PassType);
-						command.Parameters.AddWithValue("@EmployeeId", int.Parse(info.EmployeeID));
-						command.Parameters.AddWithValue("@VisitorPn", long.Parse(info.VisitorPn));
-						command.Parameters.AddWithValue("@ReceiptNumber", long.Parse(info.ReceiptNumber));
+						command.Parameters.AddWithValue("@EmployeeId", info.EmployeeID);
+						command.Parameters.AddWithValue("@VisitorPn", info.VisitorPn);
+						command.Parameters.AddWithValue("@SaleTotal", info.SaleTotal);
+						//command.Parameters.AddWithValue("@SaleDate", info.SaleDate);
 
 
 						command.ExecuteNonQuery();

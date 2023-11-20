@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Linq;
 
 namespace ZooWeb.Pages.TicketSales
 {
@@ -17,20 +18,22 @@ namespace ZooWeb.Pages.TicketSales
         public void OnPost() 
         {
 			//must add check for null later
-			info.TicketID = Request.Form["TicketID"];
+			//info.TicketID = Request.Form["TicketID"];
 			info.PassType = Request.Form["PassType"];
 			info.EmployeeID = Request.Form["EmployeeID"];
 			info.VisitorPn = Request.Form["VisitorPn"];
-			info.ReceiptNumber = "placeholder";
-			Decimal total = decimal.Parse(Request.Form["Total"]);
+			info.SaleTotal = Request.Form["Total"];
+			//info.SaleDate = "placeholder";
+			//Decimal total = decimal.Parse(Request.Form["Total"]);
 
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedFields = { "TicketID", "SaleDate" };
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (fieldValue == "" || fieldValue == null)
+				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -39,52 +42,19 @@ namespace ZooWeb.Pages.TicketSales
 
 			try
 			{
-				string connectionStringTotal = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
-				using (SqlConnection connection = new SqlConnection(connectionStringTotal))
-				{
-					connection.Open();
-					string sql = "INSERT INTO receipt VALUES (@Date, @Total)";
-
-					using (SqlCommand command = new SqlCommand(sql, connection))
-					{
-						command.Parameters.AddWithValue("@Total", total);
-						command.Parameters.AddWithValue("@Date", DateTime.Now);
-
-						command.ExecuteNonQuery();
-					}
-				}
-
-				string connectionStringID = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
-
-				using (SqlConnection connection = new SqlConnection(connectionStringID))
-				{
-					connection.Open();
-					String sql = "SELECT TOP 1 * FROM receipt ORDER BY ReceiptNumber DESC;";
-					using (SqlCommand command = new SqlCommand(sql, connection))
-					{
-						using (SqlDataReader reader = command.ExecuteReader())
-						{
-							while (reader.Read())
-							{
-								info.ReceiptNumber = reader.GetInt64(0).ToString();
-							}
-						}
-					}
-				}
-
 				string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO ticket_sales VALUES (@TicketId, @PassType, @EmployeeId, @VisitorPn, @ReceiptNumber)";
+					string sql = "INSERT INTO ticket_sales (Pass_type, Eid, Visitor_pn, Sale_total) " +
+						"VALUES (@PassType, @Eid, @VisitorPn, @SaleTotal)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@TicketID", int.Parse(info.TicketID));
 						command.Parameters.AddWithValue("@PassType", info.PassType);
-						command.Parameters.AddWithValue("@EmployeeID", long.Parse(info.EmployeeID));
-						command.Parameters.AddWithValue("@VisitorPn", long.Parse(info.VisitorPn));
-						command.Parameters.AddWithValue("@ReceiptNumber", long.Parse(info.ReceiptNumber));
+						command.Parameters.AddWithValue("@Eid", info.EmployeeID);
+						command.Parameters.AddWithValue("@VisitorPn", info.VisitorPn);
+						command.Parameters.AddWithValue("@SaleTotal", info.SaleTotal);
 
 						command.ExecuteNonQuery();
 					}

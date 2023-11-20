@@ -31,7 +31,8 @@ namespace ZooWeb.Pages.TicketSales
 							info.PassType = reader.GetString(1);
 							info.EmployeeID = reader.GetInt32(2).ToString();
 							info.VisitorPn = reader.GetInt64(3).ToString();
-							info.ReceiptNumber = reader.GetInt64(4).ToString();
+							info.SaleTotal = reader.GetSqlMoney(4).ToString();
+							info.SaleDate = reader.GetDateTime(5).ToString();
 
 							ListTicketSales.Add(info);
 						}
@@ -47,6 +48,7 @@ namespace ZooWeb.Pages.TicketSales
 		public string PassType;
 		public string EmployeeID;
 		public string VisitorPn;
-		public string ReceiptNumber;
+		public string SaleTotal;
+		public string SaleDate;
 	}
 }

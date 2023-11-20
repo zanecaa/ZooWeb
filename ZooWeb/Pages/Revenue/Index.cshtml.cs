@@ -31,7 +31,7 @@ namespace ZooWeb.Pages.Revenue
                                 revenueInfo info = new revenueInfo();
                                 info.Total = reader.GetDecimal(0).ToString();
                                 info.ReceiptSource = reader.GetString(1);
-                                info.ReceiptNum = reader.GetString(2);
+							    info.ReceiptNum = reader.GetString(2);
                                 info.RevenueDate = reader.GetDateTime(3).ToString();
 
                                 listRevenue.Add(info);
