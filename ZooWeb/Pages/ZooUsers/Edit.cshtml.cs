@@ -53,7 +53,8 @@ namespace ZooWeb.Pages.ZooUsers
 				}
 
                 sql = "SELECT RoleName "
-                    + "FROM zoo_user_role";
+                    + "FROM zoo_user_role " +
+                    "WHERE RoleName <> 'system'";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -75,8 +76,8 @@ namespace ZooWeb.Pages.ZooUsers
 		{
 			//must add check for null later
 			info.UserId = Request.Form["UserId"];
-			info.Username = Request.Form["Username"];
-			if (!String.IsNullOrEmpty(Request.Form["Password"]))
+            info.Username = Request.Form["Username"];
+            if (!String.IsNullOrEmpty(Request.Form["Password"]))
 			{
 				info.PasswordHash = Argon2.Hash(Request.Form["Password"]);
 			}

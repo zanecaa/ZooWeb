@@ -27,7 +27,8 @@ namespace ZooWeb.Pages.ZooUsers
 			{
 				connection.Open();
 				String sql = "SELECT RoleName "
-					+ "FROM zoo_user_role";
+					+ "FROM zoo_user_role " +
+                    "WHERE RoleName <> 'system'";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					using (SqlDataReader reader = command.ExecuteReader())

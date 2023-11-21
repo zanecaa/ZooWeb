@@ -17,7 +17,8 @@ namespace ZooWeb.Pages.ZooUsers
             {
                 connection.Open();
                 String sql = "SELECT UserID, Username, IsActive, CreationDate " 
-                    + "FROM zoo_user";
+                    + "FROM zoo_user " +
+                    "WHERE UserRole <> 'system'";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -27,10 +28,7 @@ namespace ZooWeb.Pages.ZooUsers
                             ZooUserInfo info = new ZooUserInfo();
                             info.UserId = reader.GetInt32(0).ToString();
                             info.Username = reader.GetString(1);
-                            //info.Password = reader.GetString(3);
-                            //info.Password = "[REDACTED]";
-                            Boolean accountStatusData = (Boolean)reader["IsActive"];
-                            if (accountStatusData) { info.IsActive = "enabled"; } else { info.IsActive = "disabled"; }
+                            if (reader.GetBoolean(2)) { info.IsActive = "enabled"; } else { info.IsActive = "disabled"; }
 							info.CreationDate = reader.GetDateTime(3).ToString();
                             
 							listZooUsers.Add(info);
