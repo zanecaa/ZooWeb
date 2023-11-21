@@ -17,9 +17,8 @@
 
 <form method="POST">
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Animal Id</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Animal_Id" value="@Model.info.Animal_Id">
+			<input type="hidden" class="form-control" name="Animal_Id" value="@Model.info.Animal_Id">
 		</div>
 	</div>
 	<div class="row mb-3">
@@ -43,7 +42,7 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Sex</label>
 		<div class="col-sm-6">
-			<select id="src" name="Sex" value="@Model.info.Sex">
+			<select id="src" name="Sex" class="form-control" value="@Model.info.Sex">
 				<option value="male">Male</option>
 				<option value="female">Female</option>
 			</select>
@@ -58,7 +57,7 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Status</label>
 		<div class="col-sm-6">
-			<select id="src" name="Status" value="@Model.info.Status">
+			<select id="src" name="Status" class="form-control" value="@Model.info.Status">
 				<option value="Healthy">Healthy</option>
 				<option value="Sick">Sick</option>
 				<option value="Dead">Dead</option>
@@ -68,7 +67,12 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Location ID</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Location_ID" value="@Model.info.Location_Id">
+			<select name="Location_ID" class="form-control">
+				@foreach (EnclosureListTable item in Model.enclosureList)
+				{
+					<option value="@(item.Key)">@item.Display</option>
+				}
+			</select>
 		</div>
 	</div>
 

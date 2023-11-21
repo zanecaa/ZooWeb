@@ -2,16 +2,41 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
+using ZooWeb.Pages.ZooUsers;
+using System.Linq;
 
 namespace ZooWeb.Pages.Animals
 {
 	public class CreateModel : PageModel
 	{
 		public AnimalInfo info = new AnimalInfo();
+		public List<EnclosureListTable> enclosureList = new List<EnclosureListTable>();
 		public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
 		{
+			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				String sql = "SELECT LocationID, Type "
+					+ "FROM enclosure";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							enclosureList.Add(new EnclosureListTable
+							{
+								Key = reader.GetInt64(0).ToString(),
+								Display = reader.GetString(1)
+							});
+						}
+					}
+				}
+			}
 		}
 
 		public void OnPost()
@@ -27,11 +52,12 @@ namespace ZooWeb.Pages.Animals
 			info.Location_Id = Request.Form["Location_Id"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedFields = { "Animal_Id" };
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (fieldValue == "" || fieldValue == null)
+				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -49,18 +75,19 @@ namespace ZooWeb.Pages.Animals
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO Animal VALUES (@Animal_Id, @Name, @Scientific_name, @Common_name, @Sex, @Birth_date, @Status, @Location_ID)";
+					string sql = "INSERT INTO Animal (Name, Scientific_name, Common_name, Sex, Birth_date, Status, Location_ID) " +
+						"VALUES (@Name, @Scientific_name, @Common_name, @Sex, @Birth_date, @Status, @Location_ID)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@Animal_Id", int.Parse(info.Animal_Id));
+						//command.Parameters.AddWithValue("@Animal_Id", info.Animal_Id);
 						command.Parameters.AddWithValue("@Name", info.Name);
 						command.Parameters.AddWithValue("@Scientific_name", info.Scientific_name);
 						command.Parameters.AddWithValue("@Common_name", info.Common_name);
 						command.Parameters.AddWithValue("@Sex", (info.Sex == "male"));
 						command.Parameters.AddWithValue("@Birth_date", info.Birth_date);
 						command.Parameters.AddWithValue("@Status", info.Status);
-						command.Parameters.AddWithValue("@Location_ID", int.Parse(info.Location_Id));
+						command.Parameters.AddWithValue("@Location_ID", info.Location_Id);
 
 						command.ExecuteNonQuery();
 					}
@@ -89,5 +116,10 @@ namespace ZooWeb.Pages.Animals
 
 			Response.Redirect("/Animals/Index");
 		}
+	}
+	public class EnclosureListTable
+	{
+		public string Key { get; set; }
+		public string Display { get; set; }
 	}
 }

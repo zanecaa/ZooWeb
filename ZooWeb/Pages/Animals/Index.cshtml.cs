@@ -34,8 +34,7 @@ namespace ZooWeb.Pages.Animals
                             //if (reader.IsDBNull(3)) { info.Super_Eid = "NULL"; } else { info.Super_Eid = reader.GetInt32(3).ToString(); }
 
                             info.Common_name = reader.GetString(3);
-                            byte[] sexData = (byte[])reader["Sex"];
-                            if (sexData[0] == 1) { info.Sex = "male"; } else { info.Sex = "female"; }
+                            if (reader.GetBoolean(4)) { info.Sex = "male"; } else { info.Sex = "female"; }
                             info.Birth_date = reader.GetDateTime(5).Date;
                             info.Status = reader.GetString(6);
                             info.Location_Id = reader.GetInt64(7).ToString();

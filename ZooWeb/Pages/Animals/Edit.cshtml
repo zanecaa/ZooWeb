@@ -42,9 +42,18 @@
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Sex</label>
         <div class="col-sm-6">
-            <select id="src" name="Sex" value="@Model.info.Sex">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+            <select id="src" name="Sex" class="form-control" value="@Model.info.Sex">
+                @foreach (string item in new List<string> { "male", "female" })
+                {
+                    if (item == Model.info.Sex)
+                    {
+                        <option value="@(item)" selected="selected">@item</option>
+                    }
+                    else
+                    {
+                        <option value="@(item)">@item</option>
+                    }
+                }
             </select>
         </div>
     </div>
@@ -57,18 +66,37 @@
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Status</label>
         <div class="col-sm-6">
-        <select id="src" name="Status" value="@Model.info.Status">
-                <option value="Healthy">Healthy</option>
-                <option value="Sick">Sick</option>
-                <option value="Dead">Dead</option>
-                <option value="Transferred">Transferred</option>
+            <select id="src" name="Status" class="form-control" value="@Model.info.Status">
+                @foreach (string item in new List<string> { "Healthy", "Sick", "Dead", "Transferred" })
+                {
+                    if (item == Model.info.Status)
+                    {
+                        <option value="@(item)" selected="selected">@item</option>
+                    }
+                    else
+                    {
+                        <option value="@(item)">@item</option>
+                    }
+                }
             </select>
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Location ID</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="Location_ID" value="@Model.info.Location_Id">
+            <select name="Location_ID" class="form-control" value="@Model.info.Location_Id">
+                @foreach (EnclosureListTable item in Model.enclosureList)
+                {
+                    if (item.Key == Model.info.Location_Id)
+                    {
+                        <option value="@(item.Key)" selected="selected">@item.Display</option>
+                    }
+                    else
+                    {
+                        <option value="@(item.Key)">@item.Display</option>
+                    }
+                }
+            </select>
         </div>
     </div>
 

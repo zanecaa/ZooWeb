@@ -8,7 +8,8 @@ namespace ZooWeb.Pages.Animals
 	public class EditModel : PageModel
 	{
 		public AnimalInfo info = new AnimalInfo();
-		public string errorMsg = "";
+        public List<EnclosureListTable> enclosureList = new List<EnclosureListTable>();
+        public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
 		{
@@ -33,15 +34,30 @@ namespace ZooWeb.Pages.Animals
 							info.Name = reader.GetString(1);
 							info.Scientific_name = reader.GetString(2);
 							info.Common_name = reader.GetString(3);
-							byte[] sexData = (byte[])reader["Sex"];
-							if (sexData[0] == 1) { info.Sex = "male"; } else { info.Sex = "female"; }
+							if (reader.GetBoolean(4)) { info.Sex = "male"; } else { info.Sex = "female"; }
 							info.Birth_date = reader.GetDateTime(5);
 							info.Status = reader.GetString(6);
 							info.Location_Id = reader.GetInt64(7).ToString();
 						}
 					}
 				}
-			}
+                sql = "SELECT LocationID, Type "
+                    + "FROM enclosure";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            enclosureList.Add(new EnclosureListTable
+                            {
+                                Key = reader.GetInt64(0).ToString(),
+                                Display = reader.GetString(1)
+                            });
+                        }
+                    }
+                }
+            }
 		}
 		public void OnPost()
 		{
