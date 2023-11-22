@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Linq;
+using ZooWeb.Pages.Employees;
 
 namespace ZooWeb.Pages.TicketSales
 {
 	public class EditModel : PageModel
 	{
 		public TicketSaleInfo info = new TicketSaleInfo();
-		public string errorMsg = "";
+		public List<ListTable> employeeList = new List<ListTable>();
+        public List<ListTable> visitorPnList = new List<ListTable>();
+        public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
 		{
@@ -34,12 +37,46 @@ namespace ZooWeb.Pages.TicketSales
 							info.EmployeeID = reader.GetInt32(2).ToString();
 							info.VisitorPn = reader.GetInt64(3).ToString();
 							info.SaleTotal = reader.GetSqlMoney(4).ToString();
-							info.SaleDate = reader.GetDateTime(4).ToString();
+							info.SaleDate = reader.GetDateTime(5).ToString();
 
 						}
 					}
 				}
-			}
+
+				sql = "SELECT EmployeeId, FName, Lname "
+				+ "FROM employee";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							employeeList.Add(new ListTable
+							{
+								Key = reader.GetInt32(0).ToString(),
+								Display = reader.GetString(2) + ", " + reader.GetString(1)
+							});
+						}
+					}
+				}
+
+                sql = "SELECT PhoneNumber "
+                + "FROM visitor";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            visitorPnList.Add(new ListTable
+                            {
+                                Key = reader.GetInt64(0).ToString(),
+                                Display = reader.GetInt64(0).ToString()
+                            });
+                        }
+                    }
+                }
+            }
 		}
 		public void OnPost()
 		{
@@ -48,7 +85,7 @@ namespace ZooWeb.Pages.TicketSales
 			info.PassType = Request.Form["PassType"];
 			info.EmployeeID = Request.Form["EmployeeID"];
 			info.VisitorPn = Request.Form["VisitorPn"];
-			info.SaleTotal = Request.Form["Total"];
+			info.SaleTotal = Request.Form["SaleTotal"];
 			//info.SaleDate = Request.Form["ReceiptNumber"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -59,8 +96,7 @@ namespace ZooWeb.Pages.TicketSales
 				object fieldValue = field.GetValue(info);
 				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
-					errorMsg = "All fields are required";
-					System.Diagnostics.Debug.WriteLine(field);
+                    errorMsg = "Missing required field: " + field.Name;
 					return;
 				}
 			}
@@ -72,8 +108,8 @@ namespace ZooWeb.Pages.TicketSales
 				{
 					connection.Open();
 					string sql = "UPDATE ticket_sales " +
-						"SET PassType=@PassType, EmployeeId=@EmployeeId, VisitorPn=@VisitorPn, Sale_total=@SaleTotal" +
-						" WHERE TicketId=@TicketId";
+						"SET Pass_type=@PassType, Eid=@EmployeeId, Visitor_pn=@VisitorPn, Sale_total=@SaleTotal" +
+						" WHERE Ticket_Id=@TicketId";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
@@ -101,7 +137,7 @@ namespace ZooWeb.Pages.TicketSales
 			}
 			successMsg = "Ticket Sales Updated";
 
-			Response.Redirect("/Ticket Sales/Index");
+			Response.Redirect("/TicketSales/Index");
 		}
 	}
 }

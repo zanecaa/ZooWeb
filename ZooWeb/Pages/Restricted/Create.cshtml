@@ -17,9 +17,15 @@
 
 <form method="POST">
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Loaction Id</label>
+		<label class="col-sm-3 col-form-label">Location</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Location_ID" value="@Model.info.Location_ID">
+			<select class="form-control" name="Location_ID" value="@Model.info.Location_ID">
+				<option value="">-</option>
+				@foreach (EnclosureListTable item in Model.enclosureList)
+				{
+					<option value="@(item.Key)">@item.Display</option>
+				}
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">

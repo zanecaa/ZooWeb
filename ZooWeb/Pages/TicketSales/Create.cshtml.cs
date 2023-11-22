@@ -3,17 +3,59 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Linq;
+using ZooWeb.Pages.Employees;
 
 namespace ZooWeb.Pages.TicketSales
 {
     public class CreateModel : PageModel
     {
         public TicketSaleInfo info = new TicketSaleInfo();
-        public string errorMsg = "";
+		public List<ListTable> employeeList = new List<ListTable>();
+		public List<ListTable> visitorPnList = new List<ListTable>();
+		public string errorMsg = "";
 		public string successMsg = "";
         public void OnGet()
         {
-        }
+			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				String sql = "SELECT EmployeeId, FName, Lname "
+				+ "FROM employee";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							employeeList.Add(new ListTable
+							{
+								Key = reader.GetInt32(0).ToString(),
+								Display = reader.GetString(2) + ", " + reader.GetString(1)
+							});
+						}
+					}
+				}
+                
+				sql = "SELECT PhoneNumber "
+                + "FROM visitor";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            visitorPnList.Add(new ListTable
+                            {
+                                Key = reader.GetInt64(0).ToString(),
+                                Display = reader.GetInt64(0).ToString()
+                            });
+                        }
+                    }
+                }
+            }
+		}
 
         public void OnPost() 
         {
@@ -35,7 +77,7 @@ namespace ZooWeb.Pages.TicketSales
 				object fieldValue = field.GetValue(info);
 				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
-					errorMsg = "All fields are required";
+					errorMsg = "Missing required field: " + field.Name;
 					return;
 				}
 			}
@@ -75,4 +117,9 @@ namespace ZooWeb.Pages.TicketSales
 			Response.Redirect("/TicketSales/Index");
 		}
     }
+	public class ListTable
+	{
+		public string Key { get; set; }
+		public string Display { get; set; }
+	}
 }
