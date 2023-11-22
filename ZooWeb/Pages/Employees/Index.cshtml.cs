@@ -30,7 +30,7 @@ namespace ZooWeb.Pages.Employees
                             { 
                                 EmployeeInfo info = new EmployeeInfo();
                                 info.EmployeeId = reader.GetInt32(0).ToString();
-                                info.Phone_num = ZooWeb.Pages.Format.FormatPhoneNumber(reader.GetInt64(1).ToString());
+                                info.Phone_num = reader.GetString(1);
 							    info.Dno = reader.GetInt16(2).ToString();
 
                                 if (reader.IsDBNull(3)){info.Super_Eid = "NULL";} else {info.Super_Eid = reader.GetInt32(3).ToString();}

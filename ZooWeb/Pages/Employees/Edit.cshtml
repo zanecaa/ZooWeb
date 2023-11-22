@@ -16,11 +16,9 @@
 }
 
 <form method="POST">
-	<input type="hidden" name="id" value="@Model.info.EmployeeId">  <!--primary key goes here-->
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Employee Id</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Eid" value="@Model.info.EmployeeId">
+			<input type="hidden" class="form-control" name="Eid" value="@Model.info.EmployeeId">
 		</div>
 	</div>
 	<div class="row mb-3">
@@ -44,13 +42,39 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Department</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Dno" value="@Model.info.Dno">
+			<select class="form-control" name="Dno" value="@Model.info.Dno">
+				<option value="">-</option>
+				@foreach (ListTable item in Model.departmentList)
+				{
+					if (item.Key == Model.info.Dno)
+					{
+						<option value="@(item.Key)" selected="selected">@item.Display</option>
+					}
+					else
+					{
+						<option value="@(item.Key)">@item.Display</option>
+					}
+				}
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Supervisor Id</label>
+		<label class="col-sm-3 col-form-label">Supervisor</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Super_Eid" value="@Model.info.Super_Eid">
+			<select class="form-control" name="Super_Eid" value="@Model.info.Super_Eid">
+				<option value="">-</option>
+				@foreach (ListTable item in Model.employeeList)
+				{
+					if (item.Key == Model.info.Super_Eid)
+					{
+						<option value="@(item.Key)" selected="selected">@item.Display</option>
+					}
+					else
+					{
+						<option value="@(item.Key)">@item.Display</option>
+					}
+				}
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
@@ -83,7 +107,7 @@
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
 		<div class="col-sm-3 d-grid">
-			<a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+			<a class="btn btn-outline-primary" href="/Employees/Index" role="button">Cancel</a>
 		</div>
 	</div>
 </form>

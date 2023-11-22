@@ -36,8 +36,7 @@ namespace ZooWeb.Pages.ZooUsers
 							info.UserId = reader.GetInt32(0).ToString();
 							info.Username = reader.GetString(1);
 							info.PasswordHash = reader.GetString(2);
-							Boolean accountStatusData = (Boolean)reader["IsActive"];
-							if (accountStatusData) { info.IsActive = "enabled"; }
+							if (reader.GetBoolean(3)) { info.IsActive = "enabled"; }
 							else { info.IsActive = "disabled";  }							
 							info.CreationDate = reader.GetDateTime(4).ToString();
 							try

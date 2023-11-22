@@ -37,13 +37,24 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Department</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Dno" value="@Model.info.Dno">
+			<select class="form-control" name="Dno" value="@Model.info.Dno">
+				@foreach (ListTable item in Model.departmentList)
+				{
+					<option value="@(item.Key)">@item.Display</option>
+				}
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Supervisor Id</label>
+		<label class="col-sm-3 col-form-label">Supervisor</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="Super_Eid" value="@Model.info.Super_Eid">
+			<select class="form-control" name="Super_Eid" value="@Model.info.Super_Eid">
+				<option value="">-</option>
+				@foreach (ListTable item in Model.employeeList)
+				{
+					<option value="@(item.Key)">@item.Display</option>
+				}
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
