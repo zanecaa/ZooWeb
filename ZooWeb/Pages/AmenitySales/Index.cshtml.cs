@@ -33,7 +33,7 @@ namespace ZooWeb.Pages.AmenitySales
                             info.LocationID = reader.GetInt32(1).ToString();
                             info.SaleType = reader.GetString(2);
                             info.SaleDate = reader.GetDateTime(3).ToString("yyyy-MM-dd");
-							info.SaleTotal = reader.GetDecimal(4).ToString();
+							info.SaleTotal = reader.GetSqlMoney(4).ToString();
                             info.SaleId = reader.GetInt64(5).ToString();
 
                             ListAmentySales.Add(info);

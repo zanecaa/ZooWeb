@@ -3,16 +3,16 @@
 @{
 	try
 	{
-		String LocationID = Request.Query["id"];
+		String SaleId = Request.Query["id"];
 		string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 		using (SqlConnection connection = new SqlConnection(connectionString))
 		{
 			connection.Open();
-			String sql = "DELETE FROM amenitySales WHERE LocationID=@LocationID";
+			String sql = "DELETE FROM amenitySales WHERE SaleId=@SaleId";
 
 			using (SqlCommand command = new SqlCommand(sql, connection))
 			{
-				command.Parameters.AddWithValue("@LocationID", LocationID);
+				command.Parameters.AddWithValue("@SaleId", SaleId);
 
 				command.ExecuteNonQuery();
 			}
