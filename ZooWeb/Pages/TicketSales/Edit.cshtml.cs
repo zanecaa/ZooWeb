@@ -36,8 +36,8 @@ namespace ZooWeb.Pages.TicketSales
 							info.PassType = reader.GetString(1);
 							info.EmployeeID = reader.GetInt32(2).ToString();
 							info.VisitorPn = reader.GetInt64(3).ToString();
-							info.SaleTotal = reader.GetSqlMoney(4).ToString();
-							info.SaleDate = reader.GetDateTime(5).ToString();
+							info.SaleTotal = reader.GetSqlMoney(5).ToString();
+							info.SaleDate = reader.GetDateTime(4).ToString();
 
 						}
 					}
@@ -108,7 +108,7 @@ namespace ZooWeb.Pages.TicketSales
 				{
 					connection.Open();
 					string sql = "UPDATE ticket_sales " +
-						"SET Pass_type=@PassType, Eid=@EmployeeId, Visitor_pn=@VisitorPn, Sale_total=@SaleTotal" +
+						"SET Pass_type=@PassType, Eid=@EmployeeId, Visitor_pn=@VisitorPn, R_total=@SaleTotal" +
 						" WHERE Ticket_Id=@TicketId";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))

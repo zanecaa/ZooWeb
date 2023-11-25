@@ -47,7 +47,7 @@ namespace ZooWeb.Pages.Revenue
 
 					if (eid != null)
 					{
-						sql = sql + " AND Eid=@Eid";
+						sql = sql + " AND EmployeeId=@Eid";
 					}
 					if (source != "Any")
 					{
@@ -71,8 +71,9 @@ namespace ZooWeb.Pages.Revenue
 									info.ReceiptSource = reader.GetString(1);
 									info.ReceiptNum = reader.GetString(2);
 									info.RevenueDate = reader.GetDateTime(3).ToString();
-									info.Eid = reader.GetInt32(4).ToString();
-
+									if (reader.GetInt32(4) == null) { info.Eid = ""; }
+									else { info.Eid = reader.GetInt32(4).ToString(); }
+									
 									RevenueTotal = RevenueTotal + reader.GetDecimal(0);
 
 									listRevenue.Add(info);

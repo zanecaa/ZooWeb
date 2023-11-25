@@ -88,7 +88,7 @@ namespace ZooWeb.Pages.TicketSales
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO ticket_sales (Pass_type, Eid, Visitor_pn, Sale_total) " +
+					string sql = "INSERT INTO ticket_sales (Pass_type, Eid, Visitor_pn, R_total) " +
 						"VALUES (@PassType, @Eid, @VisitorPn, @SaleTotal)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
