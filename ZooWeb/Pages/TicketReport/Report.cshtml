@@ -1,0 +1,94 @@
+﻿@page
+@model ZooWeb.Pages.TicketReport.ReportModel
+
+<br>
+<h2>Select the pass type and enter the employee ID</h2>
+<br>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>@Model.ErrorMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="POST">
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Select Pass Type</label>
+        <div class="col-sm-6">
+            <select class="form-select" id="PassType" name="PassType">
+                <option value="Adult">Adult</option>
+                <option value="Child">Child</option>
+                <option value="Senior">Senior</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Enter Employee ID</label>
+        <div class="col-sm-6">
+            <input type="number" class="form-control" id="EmployeeID" name="EmployeeID" value="" placeholder="Optional: Enter Employee ID">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="offset-sm-3 col-sm-3 d-grid">
+            <button type="submit" class="btn btn-primary">Generate Report</button>
+        </div>
+        <div class="col-sm-3 d-grid">
+            <a class="btn btn-outline-primary" href="/Index" role="button">Cancel</a>
+        </div>
+    </div>
+</form>
+
+<br></br>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="row mb-3">
+        <div class="col-sm-9">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>@Model.SuccessMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+}
+<br></br>
+
+@if (Model.TicketSaleInfo.Count() > 0)
+{
+    <div class="row mb-3">
+        <div class="col-sm-9">
+            <p>Total Number of Tickets: @Model.TotalTickets</p>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ticket ID</th>
+                <th>Pass Type</th>
+                <th>Visitor Phone</th>
+                <th>Employee ID</th>
+                <th>Sale Total</th>
+                <th>Sale Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.TicketSaleInfo)
+            {
+                <tr>
+                    <td>@item.TicketID</td>
+                    <td>@item.PassType</td>
+                    <td>@item.VisitorPn</td>
+                    <td>@item.EmployeeID</td>
+                    <td>@item.SaleTotal</td>
+                    <td>@item.SaleDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
