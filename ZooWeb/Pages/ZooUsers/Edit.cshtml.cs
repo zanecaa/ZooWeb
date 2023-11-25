@@ -38,10 +38,10 @@ namespace ZooWeb.Pages.ZooUsers
 							info.PasswordHash = reader.GetString(2);
 							if (reader.GetBoolean(3)) { info.IsActive = "enabled"; }
 							else { info.IsActive = "disabled";  }							
-							info.CreationDate = reader.GetDateTime(4).ToString();
+							info.CreationDate = reader.GetDateTime(5).ToString();
 							try
 							{
-								info.UserRole = reader.GetString(5);
+								info.UserRole = reader.GetString(4);
 							}
 							catch (SqlNullValueException)
 							{
