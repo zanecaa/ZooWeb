@@ -2,13 +2,14 @@
 @using System.Data.SqlClient;
 
 @{
-	try{
+	try
+	{
 		String PhoneNumber = Request.Query["id"];
 		string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 		using (SqlConnection connection = new SqlConnection(connectionString))
 		{
 			connection.Open();
-			String sql = "DELETE FROM visitor WHERE PhoneNumber=@PhoneNumber";
+			String sql = "DELETE visitor WHERE PhoneNumber=@PhoneNumber";
 
 			using (SqlCommand command = new SqlCommand(sql, connection)){
 				System.Diagnostics.Debug.WriteLine(PhoneNumber);
@@ -18,9 +19,7 @@
 			}
 		}
 	}
-	catch(Exception ex)
-	{
-		System.Diagnostics.Debug.WriteLine(ex.Message);
-	}
+	catch (Exception ex)
+	{	}
 	Response.Redirect("/Visitor/Index");
 }
