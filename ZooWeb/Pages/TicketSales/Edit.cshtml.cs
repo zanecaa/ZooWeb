@@ -2,13 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Linq;
+using ZooWeb.Pages.Employees;
 
 namespace ZooWeb.Pages.TicketSales
 {
 	public class EditModel : PageModel
 	{
 		public TicketSaleInfo info = new TicketSaleInfo();
-		public string errorMsg = "";
+		public List<ListTable> employeeList = new List<ListTable>();
+        public List<ListTable> visitorPnList = new List<ListTable>();
+        public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
 		{
@@ -16,7 +20,7 @@ namespace ZooWeb.Pages.TicketSales
 			// TODO: actually use this (addresses race condition)
 			if (TicketSaleID == null || TicketSaleID == "") { errorMsg = "y tho?"; return; };
 
-			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+			string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
@@ -32,12 +36,47 @@ namespace ZooWeb.Pages.TicketSales
 							info.PassType = reader.GetString(1);
 							info.EmployeeID = reader.GetInt32(2).ToString();
 							info.VisitorPn = reader.GetInt64(3).ToString();
-							info.ReceiptNumber = reader.GetInt64(4).ToString();
+							info.SaleTotal = reader.GetSqlMoney(5).ToString();
+							info.SaleDate = reader.GetDateTime(4).ToString();
 
 						}
 					}
 				}
-			}
+
+				sql = "SELECT EmployeeId, FName, Lname "
+				+ "FROM employee";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							employeeList.Add(new ListTable
+							{
+								Key = reader.GetInt32(0).ToString(),
+								Display = reader.GetString(2) + ", " + reader.GetString(1)
+							});
+						}
+					}
+				}
+
+                sql = "SELECT PhoneNumber "
+                + "FROM visitor";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            visitorPnList.Add(new ListTable
+                            {
+                                Key = reader.GetInt64(0).ToString(),
+                                Display = reader.GetInt64(0).ToString()
+                            });
+                        }
+                    }
+                }
+            }
 		}
 		public void OnPost()
 		{
@@ -46,38 +85,40 @@ namespace ZooWeb.Pages.TicketSales
 			info.PassType = Request.Form["PassType"];
 			info.EmployeeID = Request.Form["EmployeeID"];
 			info.VisitorPn = Request.Form["VisitorPn"];
-			info.ReceiptNumber = Request.Form["ReceiptNumber"];
+			info.SaleTotal = Request.Form["SaleTotal"];
+			//info.SaleDate = Request.Form["ReceiptNumber"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedFields = { "TicketID", "SaleDate" };
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if ((fieldValue == "" || fieldValue == null))
+				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
-					errorMsg = "All fields are required";
-					System.Diagnostics.Debug.WriteLine(field);
+                    errorMsg = "Missing required field: " + field.Name;
 					return;
 				}
 			}
 
 			try
 			{
-				string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+				string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
 					string sql = "UPDATE ticket_sales " +
-						"SET PassType=@PassType, EmployeeId=@EmployeeID, VisitorPn=@VisitorPn, ReceiptNumber=@ReceiptNumber" +
-						" WHERE TicketId=@TicketID";
+						"SET Pass_type=@PassType, Eid=@EmployeeId, Visitor_pn=@VisitorPn, R_total=@SaleTotal" +
+						" WHERE Ticket_Id=@TicketId";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@TicketId", int.Parse(info.TicketID));
+						command.Parameters.AddWithValue("@TicketId", info.TicketID);
 						command.Parameters.AddWithValue("@PassType", info.PassType);
-						command.Parameters.AddWithValue("@EmployeeId", int.Parse(info.EmployeeID));
-						command.Parameters.AddWithValue("@VisitorPn", long.Parse(info.VisitorPn));
-						command.Parameters.AddWithValue("@ReceiptNumber", long.Parse(info.ReceiptNumber));
+						command.Parameters.AddWithValue("@EmployeeId", info.EmployeeID);
+						command.Parameters.AddWithValue("@VisitorPn", info.VisitorPn);
+						command.Parameters.AddWithValue("@SaleTotal", info.SaleTotal);
+						//command.Parameters.AddWithValue("@SaleDate", info.SaleDate);
 
 
 						command.ExecuteNonQuery();
@@ -96,7 +137,7 @@ namespace ZooWeb.Pages.TicketSales
 			}
 			successMsg = "Ticket Sales Updated";
 
-			Response.Redirect("/Ticket Sales/Index");
+			Response.Redirect("/TicketSales/Index");
 		}
 	}
 }

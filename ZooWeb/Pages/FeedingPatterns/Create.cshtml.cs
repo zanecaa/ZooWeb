@@ -2,16 +2,40 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
+using ZooWeb.Pages.Animals;
 
 namespace ZooWeb.Pages.FeedingPatterns
 {
 	public class CreateModel : PageModel
 	{
 		public FeedingPatternInfo info = new FeedingPatternInfo();
+		public List<AnimalListTable> animalList = new List<AnimalListTable>();
 		public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
 		{
+			string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				String sql = "SELECT Animal_ID, Name, Common_name "
+					+ "FROM animal";
+				using (SqlCommand command = new SqlCommand(sql, connection))
+				{
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							animalList.Add(new AnimalListTable
+							{
+								Key = reader.GetInt32(0).ToString(),
+								Display = reader.GetString(1) + " (" + reader.GetString(2) + ")"
+							});
+						}
+					}
+				}
+			}
 		}
 
 		public void OnPost()
@@ -48,7 +72,7 @@ namespace ZooWeb.Pages.FeedingPatterns
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@AnimalId", int.Parse(info.Animal_ID));
+						command.Parameters.AddWithValue("@AnimalId", info.Animal_ID);
 						command.Parameters.AddWithValue("@Meal", info.Meal);
 						command.Parameters.AddWithValue("@Portion", info.Portion);
 						command.Parameters.AddWithValue("@ScheduleDays", scheduleDays);
@@ -83,5 +107,10 @@ namespace ZooWeb.Pages.FeedingPatterns
 
 			Response.Redirect("/FeedingPatterns/Index");
 		}
+	}
+	public class AnimalListTable
+	{
+		public string Key { get; set; }
+		public string Display { get; set; }
 	}
 }

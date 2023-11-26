@@ -34,6 +34,7 @@
 			<select id="src" name="src">
 				<option value="Ticket Sales">Ticket</option>
 				<option value="Amenity Sales">Amenity</option>
+				<option value="Online">Online</option>
 				<option value="Any">Any</option>
 			</select>
 		</div>
@@ -93,6 +94,9 @@
 	{
 		<table class="table">
 			<thead>
+				<tr>
+					<th>Revenue Total: @Model.RevenueTotal</th>
+				</tr>
 				<tr>
 					<th>Total</th>
 					<th>Source</th>

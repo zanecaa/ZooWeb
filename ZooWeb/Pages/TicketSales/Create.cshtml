@@ -17,27 +17,43 @@
 
 <form method="POST">
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Ticket ID</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="TicketID" value="@Model.info.TicketID">
+			<input type="hidden" class="form-control" name="TicketID" value="@Model.info.TicketID">
 		</div>
 	</div>
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Pass Type</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="PassType" value="@Model.info.PassType">
+			<select class="form-control" name="PassType" value="@Model.info.PassType">
+				<option value="Child">Child</option>
+				<option value="Adult">Adult</option>
+				<option value="Senior">Senior</option>
+				<option value="Veteran">Veteran</option>
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Employee ID</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="EmployeeID" value="@Model.info.EmployeeID">
+			<select class="form-control" name="EmployeeID" value="@Model.info.EmployeeID">
+				<option value="">-</option>
+				@foreach (ListTable item in Model.employeeList)
+				{
+					<option value="@(item.Key)">@item.Display</option>
+				}
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
-		<label class="col-sm-3 col-form-label">Visitor PN</label>
+		<label class="col-sm-3 col-form-label">Visitor Phone Number</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="VisitorPn" value="@Model.info.VisitorPn">
+			<select class="form-control" name="VisitorPn" value="@Model.info.VisitorPn">
+				<option value="">-</option>
+				@foreach (ListTable item in Model.visitorPnList)
+				{
+					<option value="@(item.Key)">@item.Display</option>
+				}
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
@@ -64,7 +80,7 @@
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
 		<div class="col-sm-3 d-grid">
-			<a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+			<a class="btn btn-outline-primary" href="/TicketSales/Index" role="button">Cancel</a>
 		</div>
 	</div>
 </form>

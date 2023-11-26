@@ -16,7 +16,7 @@ namespace ZooWeb.Pages.Employees
 
             //try
             //
-                string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+                string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 
                 using (SqlConnection connection = new SqlConnection(connectionString)) 
                 { 
@@ -30,7 +30,7 @@ namespace ZooWeb.Pages.Employees
                             { 
                                 EmployeeInfo info = new EmployeeInfo();
                                 info.EmployeeId = reader.GetInt32(0).ToString();
-                                info.Phone_num = ZooWeb.Pages.Format.FormatPhoneNumber(reader.GetInt64(1).ToString());
+                                info.Phone_num = reader.GetString(1);
 							    info.Dno = reader.GetInt16(2).ToString();
 
                                 if (reader.IsDBNull(3)){info.Super_Eid = "NULL";} else {info.Super_Eid = reader.GetInt32(3).ToString();}
@@ -65,4 +65,3 @@ namespace ZooWeb.Pages.Employees
         public string Salary;
     }
 }  
-//hello

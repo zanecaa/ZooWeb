@@ -8,7 +8,8 @@ namespace ZooWeb.Pages.Animals
 	public class EditModel : PageModel
 	{
 		public AnimalInfo info = new AnimalInfo();
-		public string errorMsg = "";
+        public List<EnclosureListTable> enclosureList = new List<EnclosureListTable>();
+        public string errorMsg = "";
 		public string successMsg = "";
 		public void OnGet()
 		{
@@ -16,7 +17,7 @@ namespace ZooWeb.Pages.Animals
 			// TODO: actually use this (addresses race condition)
 			if (Animal_Id == null || Animal_Id == "") { errorMsg = "y tho?"; return; };
 
-			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+			string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
@@ -33,15 +34,30 @@ namespace ZooWeb.Pages.Animals
 							info.Name = reader.GetString(1);
 							info.Scientific_name = reader.GetString(2);
 							info.Common_name = reader.GetString(3);
-							byte[] sexData = (byte[])reader["Sex"];
-							if (sexData[0] == 1) { info.Sex = "male"; } else { info.Sex = "female"; }
+							if (reader.GetBoolean(4)) { info.Sex = "male"; } else { info.Sex = "female"; }
 							info.Birth_date = reader.GetDateTime(5);
 							info.Status = reader.GetString(6);
 							info.Location_Id = reader.GetInt64(7).ToString();
 						}
 					}
 				}
-			}
+                sql = "SELECT LocationID, Type "
+                    + "FROM enclosure";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            enclosureList.Add(new EnclosureListTable
+                            {
+                                Key = reader.GetInt64(0).ToString(),
+                                Display = reader.GetString(1)
+                            });
+                        }
+                    }
+                }
+            }
 		}
 		public void OnPost()
 		{

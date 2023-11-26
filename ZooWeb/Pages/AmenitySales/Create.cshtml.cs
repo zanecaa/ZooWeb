@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Linq;
 
 namespace ZooWeb.Pages.AmenitySales
 {
@@ -21,16 +22,17 @@ namespace ZooWeb.Pages.AmenitySales
 			info.EID = Request.Form["EID"];
 			info.LocationID = Request.Form["LocationID"];
 			info.SaleType = Request.Form["SaleType"];
-			info.SaleDate = Request.Form["SaleDate"];
-			info.Total = Request.Form["Total"];
-			//info.ReceiptNumber = Request.Form["ReceiptNumber"];
+			//info.SaleDate = Request.Form["SaleDate"];
+			info.SaleTotal = Request.Form["Total"];
+			//info.SaleId = Request.Form["ReceiptNumber"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedNames = { "SaleDate", "SaleId" };
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (field.Name != "ReceiptNumber" && (fieldValue == "" || fieldValue == null))
+				if (!excludedNames.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
 					errorMsg = "All fields are required";
 					return;
@@ -39,49 +41,23 @@ namespace ZooWeb.Pages.AmenitySales
 
 			try
 			{
-				string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+				string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
 
-					string receipt_sql = "INSERT INTO receipt (Date, SaleTotal)" +
-						"	VALUES (@SaleDate, @Total)";
-					string get_receiptnum_sql = "SELECT ReceiptNumber FROM receipt WHERE Date=@SaleDate";
-					//string amenity_sql = "INSERT INTO amenitySales VALUES (@EID, @LocationID, @SaleType, @SaleDate, @Total, @ReceiptNumber)";
-					string amenity_sql = "INSERT INTO amenitySales (Eid, LocationID, SaleType, ReceiptNumber)" +
-						"	VALUES (@EID, @LocationID, @SaleType, @ReceiptNumber)";
+					string sql = "INSERT INTO amenitySales (Eid, LocationID, SaleType, SaleTotal)" +
+						"	VALUES (@EID, @LocationID, @SaleType, @SaleTotal)";
 					
-					using (SqlCommand command = new SqlCommand(receipt_sql, connection))
+					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@SaleDate", info.SaleDate);
-						command.Parameters.AddWithValue("@Total", info.Total);
-
-						command.ExecuteNonQuery();
-					}
-
-					using (SqlCommand command = new SqlCommand(get_receiptnum_sql, connection))
-					{
-						command.Parameters.AddWithValue("@SaleDate",info.SaleDate);
-						using (SqlDataReader reader = command.ExecuteReader())
-						{
-							if (reader.Read())
-							{
-								info.ReceiptNumber = reader.GetInt64(0).ToString();
-							}
-						}
-					}
-					
-					using (SqlCommand command = new SqlCommand(amenity_sql, connection))
-					{
-						command.Parameters.AddWithValue("@EID", int.Parse(info.EID));
-						command.Parameters.AddWithValue("@LocationID", int.Parse(info.LocationID));
+						command.Parameters.AddWithValue("@EID", info.EID);
+						command.Parameters.AddWithValue("@LocationID", info.LocationID);
 						command.Parameters.AddWithValue("@SaleType", info.SaleType);
-						command.Parameters.AddWithValue("@ReceiptNumber", int.Parse(info.ReceiptNumber));
+						command.Parameters.AddWithValue("@SaleTotal", info.SaleTotal);
 
 						command.ExecuteNonQuery();
 					}
-
-					
 				}
 			}
 			catch (Exception ex)

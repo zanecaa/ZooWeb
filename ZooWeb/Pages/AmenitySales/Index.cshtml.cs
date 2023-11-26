@@ -15,14 +15,13 @@ namespace ZooWeb.Pages.AmenitySales
         public void OnGet()
         {
 
-            string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+            string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                String sql = "SELECT Eid, LocationId, SaleType, Date, SaleTotal, r.ReceiptNumber " +
-                    "FROM amenitySales AS ams, receipt AS r " +
-                    "WHERE ams.ReceiptNumber = r.ReceiptNumber";
+                String sql = "SELECT * " +
+                    "FROM amenitySales";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -34,8 +33,8 @@ namespace ZooWeb.Pages.AmenitySales
                             info.LocationID = reader.GetInt32(1).ToString();
                             info.SaleType = reader.GetString(2);
                             info.SaleDate = reader.GetDateTime(3).ToString("yyyy-MM-dd");
-							info.Total = reader.GetDecimal(4).ToString();
-                            info.ReceiptNumber = reader.GetInt64(5).ToString();
+							info.SaleTotal = reader.GetSqlMoney(4).ToString();
+                            info.SaleId = reader.GetInt64(5).ToString();
 
                             ListAmentySales.Add(info);
                         }
@@ -52,6 +51,6 @@ public class AmenitytSalesInfo
     public string LocationID;
     public string SaleType;
     public string SaleDate;
-    public string Total;
-    public string ReceiptNumber;
+    public string SaleTotal;
+    public string SaleId;
 }

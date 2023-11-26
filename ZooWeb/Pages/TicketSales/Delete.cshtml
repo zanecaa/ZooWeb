@@ -3,12 +3,12 @@
 
 @{
 	try{
-		String TicketID = Request.Query["id"];
-		string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+		string TicketID = Request.Query["id"];
+		string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 		using (SqlConnection connection = new SqlConnection(connectionString))
 		{
 			connection.Open();
-			String sql = "DELETE ticket_sales WHERE TicketID=@TicketId";
+			string sql = "DELETE FROM ticket_sales WHERE Ticket_Id=@TicketId";
 			
 			using (SqlCommand command = new SqlCommand(sql, connection)){
 				command.Parameters.AddWithValue("@TicketId", TicketID);
@@ -17,6 +17,6 @@
 			}
 		}
 	}
-	catch(Exception ex){}
+	catch (Exception ex) {System.Diagnostics.Debug.WriteLine(ex); }
 	Response.Redirect("/TicketSales/Index");
 }

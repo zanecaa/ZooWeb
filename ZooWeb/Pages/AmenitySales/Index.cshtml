@@ -23,10 +23,10 @@
 				<td>@item.LocationID</td>
 				<td>@item.SaleType</td>
 				<td>@item.SaleDate</td>
-				<td>@item.Total</td>
+				<td>@item.SaleTotal</td>
 				<td>
-					<a class='btn btn-primary btn-sm' href="/AmenitySales/Edit?id=@item.LocationID">Edit</a>
-					<a class='btn btn-danger btn-sm' href="/AmenitySales/Delete?id=@item.LocationID">Delete</a>
+					<a class='btn btn-primary btn-sm' href="/AmenitySales/Edit?id=@item.SaleId">Edit</a>
+					<a class='btn btn-danger btn-sm' href="/AmenitySales/Delete?id=@item.SaleId">Delete</a>
 				</td>
 			</tr>
 		}

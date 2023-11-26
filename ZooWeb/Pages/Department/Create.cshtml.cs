@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Linq;
 
 namespace ZooWeb.Pages.Department
 {
@@ -21,28 +22,29 @@ namespace ZooWeb.Pages.Department
 			info.Name = Request.Form["Name"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedFields = { "Dnumber" };
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (fieldValue == "" || fieldValue == null)
+				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
-					errorMsg = "All fields are required";
+					errorMsg = "Missing required field: " + field.Name;
 					return;
 				}
 			}
 
 			try
 			{
-				string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+				string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
 					connection.Open();
-					string sql = "INSERT INTO department VALUES (@Dnumber, @Name)";
+					string sql = "INSERT INTO department (Name) VALUES (@Name)";
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@Dnumber", int.Parse(info.Dnumber));
+						//command.Parameters.AddWithValue("@Dnumber", int.Parse(info.Dnumber));
 						command.Parameters.AddWithValue("@Name", info.Name);
 
 						command.ExecuteNonQuery();

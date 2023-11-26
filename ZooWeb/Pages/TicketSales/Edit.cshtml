@@ -25,25 +25,69 @@
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Pass Type</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="PassType" value="@Model.info.PassType">
+            <select class="form-control" name="PassType" value="@Model.info.PassType">
+                @foreach (string passType in new List<string> { "Child", "Adult", "Senior", "Veteran" })
+                {
+                    if (passType == Model.info.PassType)
+                    {
+                        <option value="@passType" selected="selected">@passType</option>
+                    }
+                    else
+                    {
+                        <option value="@passType">@passType</option>
+                    }
+                }
+            </select>
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Employee ID</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="EmployeeID" value="@Model.info.EmployeeID">
+            <select class="form-control" name="EmployeeID" value="@Model.info.EmployeeID">
+                <option value="">-</option>
+                @foreach (ListTable item in Model.employeeList)
+                {
+                    if (item.Key == Model.info.EmployeeID)
+                    {
+                        <option value="@(item.Key)" selected="selected">@item.Display</option>
+                    }
+                    else
+                    {
+                        <option value="@(item.Key)">@item.Display</option>
+                    }
+                }
+            </select>
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-3 col-form-label">Visitor Pn</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="VisitorPn" value="@Model.info.VisitorPn">
+            <select class="form-control" name="VisitorPn" value="@Model.info.VisitorPn">
+                <option value="">-</option>
+                @foreach (ListTable item in Model.visitorPnList)
+                {
+                    if (item.Key == Model.info.VisitorPn)
+                    {
+                        <option value="@(item.Key)" selected="selected">@item.Display</option>
+                    }
+                    else
+                    {
+                        <option value="@(item.Key)">@item.Display</option>
+                    }
+                }
+            </select>
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Receipt Number</label>
+        <label class="col-sm-3 col-form-label">Sale Total</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="ReceiptNumber" value="@Model.info.ReceiptNumber">
+            <input type="text" class="form-control" name="SaleTotal" value="@Model.info.SaleTotal">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Sale Date</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="SaleDate" value="@Model.info.SaleDate" disabled>
         </div>
     </div>
 
@@ -65,7 +109,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
         <div class="col-sm-3 d-grid">
-            <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+            <a class="btn btn-outline-primary" href="/TicketSales/Index" role="button">Cancel</a>
         </div>
     </div>
 </form>

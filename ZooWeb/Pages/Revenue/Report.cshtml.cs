@@ -14,6 +14,7 @@ namespace ZooWeb.Pages.Revenue
 		public string successMsg = "";
 		public string source = "";
 		public string eid;
+		public decimal RevenueTotal = 0;
 
 		[DataType(DataType.Date)]
 		public DateTime startDate { get; set; }
@@ -37,7 +38,7 @@ namespace ZooWeb.Pages.Revenue
 					throw new Exception("Start date cannot exceed end date.");
 				}
 
-				string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+				string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 
 				using (SqlConnection connection = new SqlConnection(connectionString))
 				{
@@ -46,7 +47,7 @@ namespace ZooWeb.Pages.Revenue
 
 					if (eid != null)
 					{
-						sql = sql + " AND Eid=@Eid";
+						sql = sql + " AND EmployeeId=@Eid";
 					}
 					if (source != "Any")
 					{
@@ -68,9 +69,12 @@ namespace ZooWeb.Pages.Revenue
 									revenueInfo info = new revenueInfo();
 									info.Total = reader.GetDecimal(0).ToString();
 									info.ReceiptSource = reader.GetString(1);
-									info.ReceiptNum = reader.GetInt64(2).ToString();
+									info.ReceiptNum = reader.GetString(2);
 									info.RevenueDate = reader.GetDateTime(3).ToString();
-									info.Eid = reader.GetInt32(4).ToString();
+									if (reader.GetInt32(4) == null) { info.Eid = ""; }
+									else { info.Eid = reader.GetInt32(4).ToString(); }
+									
+									RevenueTotal = RevenueTotal + reader.GetDecimal(0);
 
 									listRevenue.Add(info);
 								}

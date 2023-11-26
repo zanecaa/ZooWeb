@@ -16,7 +16,7 @@ namespace ZooWeb.Pages.Department
 			String Department_number = Request.Query["id"];
 			if (Department_number == null || Department_number == "") { errorMsg = "y tho?"; return; };
 
-			string connectionString = "Server=tcp:zoowebdbserver.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
+			string connectionString = "Server=tcp:zoowebdb.database.windows.net,1433;Database=ZooWeb_db;User ID=zooadmin;Password=peanuts420!;Trusted_Connection=False;Encrypt=True;";
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
@@ -43,13 +43,14 @@ namespace ZooWeb.Pages.Department
 			info.Name = Request.Form["Name"];
 
 			FieldInfo[] fields = info.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+			string[] excludedFields = { "Dnumber" };
 
 			foreach (FieldInfo field in fields)
 			{
 				object fieldValue = field.GetValue(info);
-				if (fieldValue == "" || fieldValue == null)
+				if (!excludedFields.Contains(field.Name) && (fieldValue == "" || fieldValue == null))
 				{
-					errorMsg = "All fields are required";
+					errorMsg = "Missing required field: " + field.Name;
 					return;
 				}
 			}
@@ -66,7 +67,7 @@ namespace ZooWeb.Pages.Department
 
 					using (SqlCommand command = new SqlCommand(sql, connection))
 					{
-						command.Parameters.AddWithValue("@Dnumber", int.Parse(info.Dnumber));
+						command.Parameters.AddWithValue("@Dnumber", info.Dnumber);
 						command.Parameters.AddWithValue("@Name", info.Name);
 
 						command.ExecuteNonQuery();

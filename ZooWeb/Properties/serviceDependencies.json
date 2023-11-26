@@ -7,6 +7,16 @@
       "type": "mssql",
       "connectionId": "ConnectionStrings",
       "dynamicId": null
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "zoowebdb",
+      "dynamicId": null
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:ZooWebContext",
+      "dynamicId": null
     }
   }
 }

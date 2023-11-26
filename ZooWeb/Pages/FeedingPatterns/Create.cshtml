@@ -19,7 +19,12 @@
 	<div class="row mb-3">
 		<label class="col-sm-3 col-form-label">Animal ID</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" name="AnimalId" value="@Model.info.Animal_ID">
+			<select class="form-control" name="AnimalId" value="@Model.info.Animal_ID">
+				@foreach (AnimalListTable item in Model.animalList)
+				{
+					<option value="@(item.Key)">@item.Display</option>
+				}
+			</select>
 		</div>
 	</div>
 	<div class="row mb-3">
