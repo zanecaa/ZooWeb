@@ -56,7 +56,7 @@ namespace ZooWeb.Pages
 					connection.Open();
 
 					string userSql = "INSERT INTO zoo_user (Username, PasswordHash, IsActive, CreationDate, UserRole) " +
-									 "VALUES (@Username, @Password, @Status, @CreationDate, 'Visitor');";
+									 "VALUES (@Username, @Password, @Status, @CreationDate, 'visitor');";
 
 					using (SqlCommand userCommand = new SqlCommand(userSql, connection))
 					{

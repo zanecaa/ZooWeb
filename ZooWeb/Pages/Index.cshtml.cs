@@ -29,7 +29,7 @@ namespace ZooWeb.Pages
                 //indicate the user is authenticated.
                 var claims = new List<Claim>
                 {
-                    //new Claim(ClaimTypes.Name, "admin"),
+                    new Claim(ClaimTypes.Name, Username),
                     new Claim("user", Role),
                     new Claim(ClaimTypes.Role, Role),
                     // Add other claims as needed
@@ -41,7 +41,7 @@ namespace ZooWeb.Pages
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
                 // Redirect to the main page if login is successful
-                return RedirectToPage("/Home");
+                return RedirectToPage("/Home/Index");
             }
             else
             {
