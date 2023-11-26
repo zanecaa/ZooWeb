@@ -1,4 +1,4 @@
-﻿Zoo Database README File
+﻿Zoo Database Project Document File
 
 Overview:
 The Zoo Database aims to fulfill all the operational needs of a zoo, managing various aspects including animal details, visitor information, sales, employee records, and departmental functionalities.
