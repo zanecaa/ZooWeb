@@ -44,7 +44,7 @@ CREATE TRIGGER [dbo].[trgPreventDisableAllUsers]
 		-- Count the number of enabled users after an update
 		SELECT @EnabledUsersCount = COUNT(*)
 		FROM zoo_user
-		WHERE IsActive = 1;
+		WHERE IsActive = 1 AND UserRole = 'admin';
 
 		-- Rollback the transaction if there are no enabled users left
 		IF @EnabledUsersCount = 0
